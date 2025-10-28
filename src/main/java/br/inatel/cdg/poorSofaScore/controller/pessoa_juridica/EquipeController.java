@@ -1,0 +1,34 @@
+package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
+
+
+import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/equipe")
+public class EquipeController {
+
+    @Autowired
+    private EquipeService equipeService;
+
+    @GetMapping
+    public List<EquipeDTO> listarEquipes() {
+        return equipeService.listarEquipes();
+    }
+
+    @PostMapping
+    public Equipe adicionarEquipe(@RequestBody Equipe equipe) {
+        return equipeService.salvarEquipe(equipe);
+    }
+
+    @GetMapping("/nomes")
+    public List<EquipeNomeDTO> listarNomes() {
+        return equipeService.listarNomes();
+    }
+}

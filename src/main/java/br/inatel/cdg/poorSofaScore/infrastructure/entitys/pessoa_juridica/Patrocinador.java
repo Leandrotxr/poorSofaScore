@@ -1,0 +1,30 @@
+package br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica;
+
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.Patrocinio;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Setter
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "patrocinador")
+@Entity
+public class Patrocinador extends Empresa {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer idpatrocinador;
+    @OneToMany(mappedBy = "patrocinador", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patrocinio> listaEquipes = new ArrayList<>();
+
+    public Patrocinador(String nome, String cnpj) {
+        super(nome, cnpj);
+    }
+}
