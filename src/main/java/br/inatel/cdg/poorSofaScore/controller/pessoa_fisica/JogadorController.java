@@ -2,7 +2,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.JogadorService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +18,12 @@ public class JogadorController {
     private JogadorService jogadorService;
 
     @GetMapping
-    public List<JogadorDTO> listarCampeonatos() {
+    public List<JogadorDTO> listarJogadores() {
         return jogadorService.listarJogadores();
     }
 
     @GetMapping("/nomes")
-    public List<String> listarNomes() {
+    public List<JogadorNomeDTO> listarNomes() {
         return jogadorService.listarNome();
     }
 }

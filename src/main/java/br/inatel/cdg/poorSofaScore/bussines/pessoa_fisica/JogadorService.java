@@ -1,7 +1,7 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.JogadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,10 @@ public class JogadorService {
                 .collect(Collectors.toList());
     }
 
-    public List<String> listarNome() {
-        return jogadorRepository.findAllNomes();
+    public List<JogadorNomeDTO> listarNome() {
+        return jogadorRepository.findAll()
+                .stream()
+                .map(jogador -> new JogadorNomeDTO(jogador.getNome()))
+                .collect(Collectors.toList());
     }
 }

@@ -22,7 +22,6 @@ public class Tecnico extends Pessoa implements Contratavel {
     private Integer idtecnico;
     private String nacionalidade;
     @OneToOne
-    //@JsonBackReference
     private Equipe equipe;
 
     public Tecnico(String nome, String cpf, int idade, String nacionalidade) {
