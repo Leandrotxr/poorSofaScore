@@ -1,5 +1,6 @@
 package br.inatel.cdg.poorSofaScore.config;
 
+import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
@@ -29,7 +30,10 @@ public class DataLoader implements CommandLineRunner {
     private final ArbitroRepository arbitroRepository;
     private final CampeonatoRepository campeonatoRepository;
 
-    public DataLoader(EquipeRepository equipeRepository, TecnicoRepository tecnicoRepository, JogadorRepository jogadorRepository, PatrocinadorRepository patrocinadorRepository, FederacaoRepository federacaoRepository, ArbitroRepository arbitroRepository, CampeonatoRepository campeonatoRepository) {
+    private EquipeService equipeService;
+
+
+    public DataLoader(EquipeRepository equipeRepository, TecnicoRepository tecnicoRepository, JogadorRepository jogadorRepository, PatrocinadorRepository patrocinadorRepository, FederacaoRepository federacaoRepository, ArbitroRepository arbitroRepository, CampeonatoRepository campeonatoRepository, EquipeService equipeService) {
         this.equipeRepository = equipeRepository;
         this.tecnicoRepository = tecnicoRepository;
         this.jogadorRepository = jogadorRepository;
@@ -37,6 +41,7 @@ public class DataLoader implements CommandLineRunner {
         this.federacaoRepository = federacaoRepository;
         this.arbitroRepository = arbitroRepository;
         this.campeonatoRepository = campeonatoRepository;
+        this.equipeService = equipeService;
     }
 
     @Override
@@ -124,52 +129,6 @@ public class DataLoader implements CommandLineRunner {
         }else {
             System.out.println("ℹ️ Banco já possui jogadores, nenhuma inserção necessária.");
         }
-        if (equipeRepository.count() > 0 && jogadorRepository.count() > 0 && tecnicoRepository.count() > 0) {
-            // Busca do banco (garante IDs corretos)
-            Equipe fener = equipeRepository.findByNome("Fenerbahce")
-                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-            Equipe city = equipeRepository.findByNome("Manchester City")
-                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-            Equipe madrid = equipeRepository.findByNome("Real Madrid")
-                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-            Equipe lever = equipeRepository.findByNome("Bayer Leverkusen")
-                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-            Equipe fla = equipeRepository.findByNome("Flamengo")
-                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
-
-            Tecnico mourinho = tecnicoRepository.findByNome("Mourinho")
-                    .orElseThrow(() -> new RuntimeException("Tecnico não encontrada"));
-            Tecnico pep = tecnicoRepository.findByNome("Guardiola")
-                    .orElseThrow(() -> new RuntimeException("Tecnico não encontrada"));
-            Tecnico ancelotti = tecnicoRepository.findByNome("Ancelotti")
-                    .orElseThrow(() -> new RuntimeException("Tecnico não encontrada"));
-            Tecnico xabi = tecnicoRepository.findByNome("Xabi Alonso")
-                    .orElseThrow(() -> new RuntimeException("Tecnico não encontrada"));
-            Tecnico filipe = tecnicoRepository.findByNome("Filipe Luís")
-                    .orElseThrow(() -> new RuntimeException("Tecnico não encontrada"));
-
-            // contrata técnicos
-            fener.contratar(mourinho);
-            city.contratar(pep);
-            madrid.contratar(ancelotti);
-            lever.contratar(xabi);
-            fla.contratar(filipe);
-
-            // exemplo com jogadores (poderia ser filtrado via nome ou grupo)
-            fener.contratar(jogadorRepository.findByNome("Talisca").orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
-            fener.contratar(jogadorRepository.findByNome("Skriniar").orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
-            city.contratar(jogadorRepository.findByNome("De Bruyne").orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
-            madrid.contratar(jogadorRepository.findByNome("Vinícius Júnior").orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
-            fla.contratar(jogadorRepository.findByNome("Pedro").orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
-
-            equipeRepository.save(fener);
-            equipeRepository.save(city);
-            equipeRepository.save(madrid);
-            equipeRepository.save(lever);
-            equipeRepository.save(fla);
-
-            System.out.println("🤝 Contratações realizadas com sucesso!");
-        }
         if(patrocinadorRepository.count() == 0){
             Patrocinador patrocinador1 = new Patrocinador("Puma","10000");
             Patrocinador patrocinador2 = new Patrocinador("Etihad Airways","20000");
@@ -186,6 +145,86 @@ public class DataLoader implements CommandLineRunner {
             System.out.println("✅ patrocinadores iniciais inseridas no banco!");
         }else {
             System.out.println("ℹ️ Banco já possui patrocinadores, nenhuma inserção necessária.");
+        }
+        if (equipeRepository.count() > 0 && jogadorRepository.count() > 0 && tecnicoRepository.count() > 0 && patrocinadorRepository.count() > 0) {
+
+            // Busca do banco (garante IDs corretos)
+            Equipe fener = equipeRepository.findByNome("Fenerbahce")
+                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+            Equipe city = equipeRepository.findByNome("Manchester City")
+                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+            Equipe madrid = equipeRepository.findByNome("Real Madrid")
+                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+            Equipe lever = equipeRepository.findByNome("Bayer Leverkusen")
+                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+            Equipe fla = equipeRepository.findByNome("Flamengo")
+                    .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
+
+            Tecnico mourinho = tecnicoRepository.findByNome("Mourinho")
+                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
+            Tecnico pep = tecnicoRepository.findByNome("Guardiola")
+                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
+            Tecnico ancelotti = tecnicoRepository.findByNome("Ancelotti")
+                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
+            Tecnico xabi = tecnicoRepository.findByNome("Xabi Alonso")
+                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
+            Tecnico filipe = tecnicoRepository.findByNome("Filipe Luís")
+                    .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
+
+            // Patrocinadores
+            Patrocinador puma = patrocinadorRepository.findByNome("Puma")
+                    .orElseThrow(() -> new RuntimeException("Patrocinador não encontrado"));
+            Patrocinador etihad = patrocinadorRepository.findByNome("Etihad Airways")
+                    .orElseThrow(() -> new RuntimeException("Patrocinador não encontrado"));
+            Patrocinador fly = patrocinadorRepository.findByNome("Fly Emirates")
+                    .orElseThrow(() -> new RuntimeException("Patrocinador não encontrado"));
+            Patrocinador bayer = patrocinadorRepository.findByNome("Bayer")
+                    .orElseThrow(() -> new RuntimeException("Patrocinador não encontrado"));
+            Patrocinador pix = patrocinadorRepository.findByNome("PixBet")
+                    .orElseThrow(() -> new RuntimeException("Patrocinador não encontrado"));
+
+            // =====================
+            // ⚽ CONTRATAÇÕES
+            // =====================
+
+            // Técnicos
+            fener.contratar(mourinho);
+            city.contratar(pep);
+            madrid.contratar(ancelotti);
+            lever.contratar(xabi);
+            fla.contratar(filipe);
+
+            // Jogadores
+            fener.contratar(jogadorRepository.findByNome("Talisca")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            fener.contratar(jogadorRepository.findByNome("Skriniar")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            city.contratar(jogadorRepository.findByNome("De Bruyne")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            madrid.contratar(jogadorRepository.findByNome("Vinícius Júnior")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            fla.contratar(jogadorRepository.findByNome("Pedro")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+
+            // Patrocinadores (via interface Contratavel)
+
+            equipeService.contratarPatrocinio("Fenerbahce", "Puma", 1000);
+            equipeService.contratarPatrocinio("Manchester City", "Etihad Airways", 2000);
+            equipeService.contratarPatrocinio("Manchester City", "Puma", 3000);
+            equipeService.contratarPatrocinio("Real Madrid", "Fly Emirates", 4000);
+            equipeService.contratarPatrocinio("Bayer Leverkusen", "Bayer", 5000);
+            equipeService.contratarPatrocinio("Flamengo", "PixBet", 6000);
+
+            // =====================
+            // 💾 SALVAR NO BANCO
+            // =====================
+            equipeRepository.save(fener);
+            equipeRepository.save(city);
+            equipeRepository.save(madrid);
+            equipeRepository.save(lever);
+            equipeRepository.save(fla);
+
+            System.out.println("🤝 Contratações e patrocínios realizados com sucesso!");
         }
         if(federacaoRepository.count() == 0){
             Federacao federacao1 = new Federacao("TFF", "111");

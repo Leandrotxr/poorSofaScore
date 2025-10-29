@@ -19,9 +19,11 @@ public class Patrocinio {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "equipe_id")
     private Equipe equipe;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patrocinador_id")
     private Patrocinador patrocinador;
 
     private Integer valor;

@@ -1,6 +1,7 @@
 package br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.Patrocinio;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.interfaces.Contratavel;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
@@ -26,9 +27,9 @@ public class Equipe extends Empresa {
     private List<Jogador> lista_jogadores = new ArrayList<>();
     @OneToOne
     private Tecnico tecnico;
-    @ManyToMany
-    private List<Patrocinador> listaPatrocinios = new ArrayList<>();
-    @ManyToMany
+    @OneToMany(mappedBy = "equipe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Patrocinio> patrocinios = new ArrayList<>();
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Campeonato> lista_campeonatos = new ArrayList<>();
 
     public Equipe(String nome, String cnpj, int fundacao, String sede) {
@@ -40,4 +41,5 @@ public class Equipe extends Empresa {
     public void contratar(Contratavel contratavel) {
         contratavel.contratar(this);
     }
+
 }

@@ -8,4 +8,8 @@ public interface Contratavel {
 
     }
 
+    default void contratar(Equipe equipe, int valor) {
+
+    }
+
 }

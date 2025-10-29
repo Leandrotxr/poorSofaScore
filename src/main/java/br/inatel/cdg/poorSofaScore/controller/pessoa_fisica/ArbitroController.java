@@ -1,7 +1,8 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.ArbitroService;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroNomeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,12 @@ public class ArbitroController {
     private ArbitroService arbitroService;
 
     @GetMapping
-    public List<Arbitro> listarCampeonatos() {
-        return arbitroService.listAll();
+    public List<ArbitroDTO> listarArbitros() {
+        return arbitroService.listarArbitros();
     }
 
     @GetMapping("/nomes")
-    public List<String> listarNomes() {
+    public List<ArbitroNomeDTO> listarNomes() {
         return arbitroService.listarNome();
     }
 }

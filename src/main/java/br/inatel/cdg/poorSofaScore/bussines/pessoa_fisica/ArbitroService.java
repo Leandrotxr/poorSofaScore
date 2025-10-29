@@ -1,11 +1,13 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.ArbitroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ArbitroService {
@@ -13,11 +15,21 @@ public class ArbitroService {
     @Autowired
     private ArbitroRepository arbitroRepository;
 
-    public List<Arbitro> listAll() {
-        return arbitroRepository.findAll();
+    public List<ArbitroDTO> listarArbitros() {
+        return arbitroRepository.findAll().stream()
+                .map(arbitro -> ArbitroDTO.builder()
+                        .nome(arbitro.getNome())
+                        .idade(arbitro.getIdade())
+                        .federacao(arbitro.getFederacao() != null ? arbitro.getFederacao().getNome() : null)
+                        .build()
+                )
+                .collect(Collectors.toList());
     }
 
-    public List<String> listarNome() {
-        return arbitroRepository.findAllNomes();
+    public List<ArbitroNomeDTO> listarNome() {
+        return arbitroRepository.findAll()
+                .stream()
+                .map(arbitro -> new ArbitroNomeDTO(arbitro.getNome()))
+                .collect(Collectors.toList());
     }
 }

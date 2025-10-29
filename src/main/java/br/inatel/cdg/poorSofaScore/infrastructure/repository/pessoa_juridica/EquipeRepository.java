@@ -13,4 +13,5 @@ public interface EquipeRepository extends JpaRepository<Equipe, Integer> {
     List<String> findAllNomes();
 
     Optional<Equipe> findByNome(String nome);
+
 }
