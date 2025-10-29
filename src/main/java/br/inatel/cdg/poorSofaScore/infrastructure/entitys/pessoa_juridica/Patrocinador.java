@@ -29,15 +29,4 @@ public class Patrocinador extends Empresa implements Contratavel {
         super(nome, cnpj);
     }
 
-    @Override
-    public void contratar(Equipe equipe, int valor) {
-        Patrocinio patrocinio = Patrocinio.builder()
-                .equipe(equipe)
-                .patrocinador(this)
-                .valor(valor) // pode vir de lógica futura
-                .build();
-
-        this.listaEquipes.add(patrocinio);
-        equipe.getPatrocinios().add(patrocinio);
-    }
 }

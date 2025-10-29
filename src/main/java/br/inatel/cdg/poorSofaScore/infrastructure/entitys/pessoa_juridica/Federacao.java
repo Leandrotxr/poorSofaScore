@@ -1,6 +1,7 @@
 package br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.interfaces.Contratavel;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,5 +27,9 @@ public class Federacao extends Empresa {
 
     public Federacao(String nome, String cnpj) {
         super(nome, cnpj);
+    }
+
+    public void contratar(Contratavel contratavel) {
+        contratavel.contratar(this);
     }
 }

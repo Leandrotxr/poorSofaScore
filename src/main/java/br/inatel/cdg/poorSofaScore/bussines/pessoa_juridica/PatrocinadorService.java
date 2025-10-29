@@ -1,11 +1,12 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica;
 
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PatrocinadorService {
@@ -13,11 +14,10 @@ public class PatrocinadorService {
     @Autowired
     private PatrocinadorRepository patrocinadorRepository;
 
-    public List<Patrocinador> listAll() {
-        return patrocinadorRepository.findAll();
-    }
-
-    public List<String> listarNome() {
-        return patrocinadorRepository.findAllNomes();
+    public List<PatrocinadorNomeDTO> listarNome() {
+        return patrocinadorRepository.findAll()
+                .stream()
+                .map(patrocinador -> new PatrocinadorNomeDTO(patrocinador.getNome()))
+                .collect(Collectors.toList());
     }
 }

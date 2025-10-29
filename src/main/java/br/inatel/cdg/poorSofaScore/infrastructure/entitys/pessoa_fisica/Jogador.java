@@ -24,7 +24,6 @@ public class Jogador extends Pessoa implements Contratavel {
     private String nacionalidade;
     private String posicao;
     @ManyToOne(fetch = FetchType.LAZY)
-    //@JsonBackReference
     private Equipe equipe;
 
     public Jogador(String nome, String cpf, int idade, String nacionalidade, String posicao) {

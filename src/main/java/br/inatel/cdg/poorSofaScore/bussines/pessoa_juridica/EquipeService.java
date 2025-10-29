@@ -28,12 +28,7 @@ public class EquipeService {
     }
 
     @Transactional
-    public void contratarPatrocinio(String nomeEquipe, String nomePatrocinador, int valor) {
-        Equipe equipe = equipeRepository.findByNome(nomeEquipe)
-                .orElseThrow(() -> new RuntimeException("Equipe não encontrada: " + nomeEquipe));
-
-        Patrocinador patrocinador = patrocinadorRepository.findByNome(nomePatrocinador)
-                .orElseThrow(() -> new RuntimeException("Patrocinador não encontrado: " + nomePatrocinador));
+    public void contratarPatrocinio(Equipe equipe, Patrocinador patrocinador, int valor) {
 
         Patrocinio patrocinio = Patrocinio.builder()
                 .equipe(equipe)
@@ -42,7 +37,7 @@ public class EquipeService {
                 .build();
 
         equipe.getPatrocinios().add(patrocinio);
-        equipeRepository.save(equipe); // cascade salva automaticamente o Patrocinio
+        equipeRepository.save(equipe);
     }
 
     public List<EquipeDTO> listarEquipes() {

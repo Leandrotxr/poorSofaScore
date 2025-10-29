@@ -1,6 +1,8 @@
 package br.inatel.cdg.poorSofaScore.controller.campeonatos;
 
 import br.inatel.cdg.poorSofaScore.bussines.campeonatos.CampeonatoService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,12 +17,12 @@ public class CampeonatoController {
     private CampeonatoService campeonatoService;
 
     @GetMapping
-    public List<Campeonato> listarCampeonatos() {
-        return campeonatoService.listAll();
+    public List<CampeonatoDTO> listarCampeonatos() {
+        return campeonatoService.listarCampeonatos();
     }
 
     @GetMapping("/nomes")
-    public List<String> listarNomes() {
+    public List<CampeonatoNomeDTO> listarNomes() {
         return campeonatoService.listarNome();
     }
 }

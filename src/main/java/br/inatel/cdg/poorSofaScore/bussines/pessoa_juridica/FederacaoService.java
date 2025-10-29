@@ -18,6 +18,11 @@ public class FederacaoService {
     @Autowired
     private FederacaoRepository federacaoRepository;
 
+    public void adcionarCampeonato(Federacao federacao, Campeonato campeonato){
+        federacao.getLista_campeonato().add(campeonato);
+        campeonato.setFederacao(federacao);
+    }
+
     public List<FederacaoDTO> listarFederacao() {
         return federacaoRepository.findAll().stream()
                 .map(federacao -> FederacaoDTO.builder()

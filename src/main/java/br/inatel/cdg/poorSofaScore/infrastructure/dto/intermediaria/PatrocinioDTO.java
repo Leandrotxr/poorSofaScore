@@ -8,6 +8,5 @@ import lombok.*;
 @Builder
 public class PatrocinioDTO {
     private String patrocinador;
-    private String equipe;
     private Integer valor;
 }

@@ -13,4 +13,8 @@ public class FederacaoDTO {
     private String nome;
     private List<String> arbitros;
     private List<String> campeonatos;
+
+    /*public static class nome{
+        private String nome;
+    }*/
 }

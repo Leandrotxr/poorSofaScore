@@ -1,7 +1,7 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.PatrocinadorService;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorNomeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +16,8 @@ public class PatrocinadorController {
     @Autowired
     private PatrocinadorService patrocinadorService;
 
-    @GetMapping
-    public List<Patrocinador> listarCampeonatos() {
-        return patrocinadorService.listAll();
-    }
-
     @GetMapping("/nomes")
-    public List<String> listarNomes() {
+    public List<PatrocinadorNomeDTO> listarNomes() {
         return patrocinadorService.listarNome();
     }
 }

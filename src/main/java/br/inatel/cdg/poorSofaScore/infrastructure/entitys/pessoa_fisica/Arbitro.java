@@ -1,5 +1,7 @@
 package br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica;
 
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.interfaces.Contratavel;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,7 +13,7 @@ import lombok.*;
 @Builder
 @Table(name = "arbitro")
 @Entity
-public class Arbitro extends Pessoa {
+public class Arbitro extends Pessoa implements Contratavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,4 +26,9 @@ public class Arbitro extends Pessoa {
         super(nome, cpf, idade);
     }
 
+    @Override
+    public void contratar(Federacao federacao) {
+        this.federacao = federacao;
+        federacao.getLista_arbitro().add(this);
+    }
 }

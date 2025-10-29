@@ -5,6 +5,6 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PAtrocinadorNomeDTO {
+public class PatrocinadorNomeDTO {
     private String nome;
 }
