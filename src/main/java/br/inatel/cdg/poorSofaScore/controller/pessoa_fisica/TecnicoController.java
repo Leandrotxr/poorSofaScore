@@ -1,14 +1,11 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.TecnicoService;
-import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,10 @@ public class TecnicoController {
     @GetMapping("/{nome}")
     public TecnicoDTO buscarTecnicoPorNome(@PathVariable String nome) {
         return tecnicoService.buscarTecnicoPorNome(nome);
+    }
+
+    @PostMapping("/adicionarTecnico")
+    public void adicionarTecnico(@RequestBody Tecnico tecnico) {
+        tecnicoService.adicionarTecnico(tecnico);
     }
 }

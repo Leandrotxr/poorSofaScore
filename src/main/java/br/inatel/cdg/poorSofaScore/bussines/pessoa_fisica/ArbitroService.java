@@ -44,4 +44,8 @@ public class ArbitroService {
                 .federacao(arbitro.getFederacao() != null ? arbitro.getFederacao().getNome() : null)
                 .build();
     }
+
+    public void adicionarArbitro(Arbitro arbitro) {
+        arbitroRepository.save(arbitro);
+    }
 }

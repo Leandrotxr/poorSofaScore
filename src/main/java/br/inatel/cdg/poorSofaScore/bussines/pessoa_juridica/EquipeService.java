@@ -96,4 +96,8 @@ public class EquipeService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public void adicionarEquipe(Equipe equipe) {
+        equipeRepository.save(equipe);
+    }
 }

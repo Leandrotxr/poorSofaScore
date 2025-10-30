@@ -47,4 +47,8 @@ public class TecnicoService {
                 .equipe(tecnico.getEquipe() != null ? tecnico.getEquipe().getNome() : null)
                 .build();
     }
+
+    public void adicionarTecnico(Tecnico tecnico) {
+        tecnicoRepository.save(tecnico);
+    }
 }

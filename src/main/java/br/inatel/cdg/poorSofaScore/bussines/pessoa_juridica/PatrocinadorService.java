@@ -1,6 +1,7 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class PatrocinadorService {
                 .stream()
                 .map(patrocinador -> new PatrocinadorNomeDTO(patrocinador.getNome()))
                 .collect(Collectors.toList());
+    }
+
+    public void adicionarPatrocinador(Patrocinador patrocinador) {
+        patrocinadorRepository.save(patrocinador);
     }
 }

@@ -3,12 +3,9 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.JogadorService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
-import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +29,10 @@ public class JogadorController {
     @GetMapping("/{nome}")
     public JogadorDTO buscarJogadorPorNome(@PathVariable String nome) {
         return jogadorService.buscarJogadorPorNome(nome);
+    }
+
+    @PostMapping("/adicionarJogador")
+    public void adicionarJogador(@RequestBody Jogador jogador) {
+        jogadorService.adicionarJogador(jogador);
     }
 }

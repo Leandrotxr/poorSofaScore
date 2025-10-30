@@ -63,4 +63,8 @@ public class CampeonatoService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public void adicionarCampeonato(Campeonato campeonato) {
+        campeonatoRepository.save(campeonato);
+    }
 }

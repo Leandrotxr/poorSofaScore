@@ -60,4 +60,8 @@ public class FederacaoService {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public void adicionarFederacao(Federacao federacao) {
+        federacaoRepository.save(federacao);
+    }
 }

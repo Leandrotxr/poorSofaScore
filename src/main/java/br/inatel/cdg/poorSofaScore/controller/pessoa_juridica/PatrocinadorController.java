@@ -1,11 +1,11 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.PatrocinadorService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,5 +19,10 @@ public class PatrocinadorController {
     @GetMapping("/nomes")
     public List<PatrocinadorNomeDTO> listarNomes() {
         return patrocinadorService.listarNome();
+    }
+
+    @PostMapping("/adicionarPatrocinador")
+    public void adicionarPAtrocinador(@RequestBody Patrocinador patrocinador) {
+        patrocinadorService.adicionarPatrocinador(patrocinador);
     }
 }

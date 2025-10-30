@@ -31,4 +31,9 @@ public class CampeonatoController {
     public CampeonatoDTO buscarCampeonatoPorNome(@PathVariable String nome) {
         return campeonatoService.buscarCampeonatoPorNome(nome);
     }
+
+    @PostMapping("/adicionarCampeonato")
+    public void adicionarCampeonato(@RequestBody Campeonato campeonato) {
+        campeonatoService.adicionarCampeonato(campeonato);
+    }
 }

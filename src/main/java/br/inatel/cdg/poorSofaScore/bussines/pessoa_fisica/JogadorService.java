@@ -49,4 +49,8 @@ public class JogadorService {
                 .equipe(jogador.getEquipe() != null ? jogador.getEquipe().getNome() : null)
                 .build();
     }
+
+    public void adicionarJogador(Jogador jogador) {
+        jogadorRepository.save(jogador);
+    }
 }
