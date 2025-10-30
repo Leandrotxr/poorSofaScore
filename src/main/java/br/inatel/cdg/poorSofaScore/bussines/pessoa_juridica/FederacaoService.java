@@ -4,6 +4,7 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoD
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.FederacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +44,20 @@ public class FederacaoService {
                 .stream()
                 .map(federacao -> new FederacaoNomeDTO(federacao.getNome()))
                 .collect(Collectors.toList());
+    }
+
+    public FederacaoDTO buscarFederacaoPorNome(String nome) {
+        Federacao federacao = federacaoRepository.findByNome(nome)
+                .orElseThrow(() -> new RuntimeException("Federação não encontrada: " + nome));
+
+        return FederacaoDTO.builder()
+                .nome(federacao.getNome())
+                .arbitros(federacao.getLista_arbitro().stream()
+                        .map(Arbitro::getNome)
+                        .collect(Collectors.toList()))
+                .campeonatos(federacao.getLista_campeonato().stream()
+                        .map(Campeonato::getNome)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

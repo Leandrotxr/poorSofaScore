@@ -2,6 +2,8 @@ package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.JogadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,5 +35,18 @@ public class JogadorService {
                 .stream()
                 .map(jogador -> new JogadorNomeDTO(jogador.getNome()))
                 .collect(Collectors.toList());
+    }
+
+    public JogadorDTO buscarJogadorPorNome(String nome) {
+        Jogador jogador = jogadorRepository.findByNome(nome)
+                .orElseThrow(() -> new RuntimeException("Jogador não encontrada: " + nome));
+
+        return JogadorDTO.builder()
+                .nome(jogador.getNome())
+                .idade(jogador.getIdade())
+                .nacionalidade(jogador.getNacionalidade())
+                .posicao(jogador.getPosicao())
+                .equipe(jogador.getEquipe() != null ? jogador.getEquipe().getNome() : null)
+                .build();
     }
 }

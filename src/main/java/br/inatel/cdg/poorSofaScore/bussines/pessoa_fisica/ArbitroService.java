@@ -2,6 +2,7 @@ package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.ArbitroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,16 @@ public class ArbitroService {
                 .stream()
                 .map(arbitro -> new ArbitroNomeDTO(arbitro.getNome()))
                 .collect(Collectors.toList());
+    }
+
+    public ArbitroDTO buscarArbitroPorNome(String nome) {
+        Arbitro arbitro = arbitroRepository.findByNome(nome)
+                .orElseThrow(() -> new RuntimeException("Arbitro não encontrada: " + nome));
+
+        return ArbitroDTO.builder()
+                .nome(arbitro.getNome())
+                .idade(arbitro.getIdade())
+                .federacao(arbitro.getFederacao() != null ? arbitro.getFederacao().getNome() : null)
+                .build();
     }
 }

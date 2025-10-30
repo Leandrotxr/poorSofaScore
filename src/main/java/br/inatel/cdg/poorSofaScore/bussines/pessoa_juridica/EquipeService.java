@@ -66,10 +66,6 @@ public class EquipeService {
                 .collect(Collectors.toList());
     }
 
-    public Equipe salvarEquipe(Equipe equipe) {
-        return equipeRepository.save(equipe);
-    }
-
     public List<EquipeNomeDTO> listarNomes() {
         return equipeRepository.findAll()
                 .stream()
