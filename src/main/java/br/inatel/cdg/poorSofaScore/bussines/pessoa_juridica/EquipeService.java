@@ -6,12 +6,14 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNome
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.Patrocinio;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Pessoa;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.EquipeRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,5 +75,29 @@ public class EquipeService {
                 .stream()
                 .map(equipe -> new EquipeNomeDTO(equipe.getNome()))
                 .collect(Collectors.toList());
+    }
+
+    public EquipeDTO buscarEquipePorNome(String nome) {
+        Equipe equipe = equipeRepository.findByNome(nome)
+                .orElseThrow(() -> new RuntimeException("Equipe não encontrada: " + nome));
+
+        return EquipeDTO.builder()
+                .nome(equipe.getNome())
+                .fundacao(equipe.getFundacao())
+                .sede(equipe.getSede())
+                .jogadores(equipe.getLista_jogadores().stream()
+                        .map(Jogador::getNome)
+                .collect(Collectors.toList()))
+                .tecnico(equipe.getTecnico() != null ? equipe.getTecnico().getNome() : null)
+                .campeonatos(equipe.getLista_campeonatos().stream()
+                        .map(Campeonato::getNome)
+                        .collect(Collectors.toList()))
+                .patrocinios(equipe.getPatrocinios().stream()
+                        .map(p -> PatrocinioDTO.builder()
+                                .patrocinador(p.getPatrocinador().getNome())
+                                .valor(p.getValor())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 }

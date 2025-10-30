@@ -31,4 +31,9 @@ public class EquipeController {
     public List<EquipeNomeDTO> listarNomes() {
         return equipeService.listarNomes();
     }
+
+    @GetMapping("/{nome}")
+    public EquipeDTO buscarEquipePorNome(@PathVariable String nome) {
+        return equipeService.buscarEquipePorNome(nome);
+    }
 }
