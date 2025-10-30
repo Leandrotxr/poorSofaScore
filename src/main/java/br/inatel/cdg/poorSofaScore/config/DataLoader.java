@@ -250,6 +250,7 @@ public class DataLoader implements CommandLineRunner {
             Equipe fla = equipeRepository.findByNome("Flamengo")
                     .orElseThrow(() -> new RuntimeException("Equipe não encontrada"));
 
+            // Técnicos
             Tecnico mourinho = tecnicoRepository.findByNome("Mourinho")
                     .orElseThrow(() -> new RuntimeException("Técnico não encontrado"));
             Tecnico pep = tecnicoRepository.findByNome("Guardiola")
@@ -302,6 +303,13 @@ public class DataLoader implements CommandLineRunner {
                     .orElseThrow(() -> new RuntimeException("Árbitro não encontrado"));
             Arbitro daronco = arbitroRepository.findByNome("Daronco")
                     .orElseThrow(() -> new RuntimeException("Árbitro não encontrado"));
+            Arbitro marciniak = arbitroRepository.findByNome("Marciniak")
+                    .orElseThrow(() -> new RuntimeException("Árbitro não encontrado"));
+            Arbitro turpin = arbitroRepository.findByNome("Turpin")
+                    .orElseThrow(() -> new RuntimeException("Árbitro não encontrado"));
+            Arbitro roldan = arbitroRepository.findByNome("Roldán")
+                    .orElseThrow(() -> new RuntimeException("Árbitro não encontrado"));
+
 
             // =====================
             // ⚽ CONTRATAÇÕES
@@ -319,9 +327,33 @@ public class DataLoader implements CommandLineRunner {
                     .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
             fener.contratar(jogadorRepository.findByNome("Skriniar")
                     .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            fener.contratar(jogadorRepository.findByNome("Dzeko")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+
             city.contratar(jogadorRepository.findByNome("De Bruyne")
                     .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            city.contratar(jogadorRepository.findByNome("Doku")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            city.contratar(jogadorRepository.findByNome("Ederson")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+
             madrid.contratar(jogadorRepository.findByNome("Vinícius Júnior")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            madrid.contratar(jogadorRepository.findByNome("Modric")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            madrid.contratar(jogadorRepository.findByNome("Courtois")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+
+            lever.contratar(jogadorRepository.findByNome("Frimpong")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            lever.contratar(jogadorRepository.findByNome("Wirtz")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            lever.contratar(jogadorRepository.findByNome("Tah")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+
+            fla.contratar(jogadorRepository.findByNome("Rossi")
+                    .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
+            fla.contratar(jogadorRepository.findByNome("Arrascaeta")
                     .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
             fla.contratar(jogadorRepository.findByNome("Pedro")
                     .orElseThrow(() -> new RuntimeException("Jogador não encontrado")));
@@ -338,6 +370,9 @@ public class DataLoader implements CommandLineRunner {
             rfef.contratar(bengoetxa);
             dfb.contratar(brych);
             cbf.contratar(daronco);
+            fifa.contratar(marciniak);
+            uefa.contratar(turpin);
+            conmebol.contratar(roldan);
 
             Campeonato superLig = campeonatoRepository.findByNome("SuperLig").orElseThrow();
             Campeonato turkiyeKupasi = campeonatoRepository.findByNome("Turkiye Kupasi").orElseThrow();
