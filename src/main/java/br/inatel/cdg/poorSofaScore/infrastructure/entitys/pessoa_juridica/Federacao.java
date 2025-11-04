@@ -5,10 +5,12 @@ import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.interfac
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuperBuilder
 @Setter
 @Getter
 @AllArgsConstructor
