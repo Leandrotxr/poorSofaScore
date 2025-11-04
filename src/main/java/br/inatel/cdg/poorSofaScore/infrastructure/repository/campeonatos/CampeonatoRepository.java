@@ -1,7 +1,6 @@
 package br.inatel.cdg.poorSofaScore.infrastructure.repository.campeonatos;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
