@@ -138,4 +138,51 @@ public class EquipeServiceTest {
         assertEquals("Etihad Airways", patDTO.getPatrocinador());
         assertEquals(1000000, patDTO.getValor());
     }
+
+    @Test
+    void deveListarApenasNomesDasEquipes() {
+        when(equipeRepository.findAll()).thenReturn(List.of(equipe));
+        List<EquipeNomeDTO> nomes = equipeService.listarNomes();
+        assertEquals("Manchester City", nomes.get(0).getNome());
+    }
+
+    @Test
+    void deveRetornarEquipeDTOQuandoEncontrarPorNome() {
+        when(equipeRepository.findByNome("Manchester City")).thenReturn(Optional.of(equipe));
+
+        EquipeDTO dto = equipeService.buscarEquipePorNome("Manchester City");
+
+        assertEquals("Manchester City", dto.getNome());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoEquipeNaoEncontrada() {
+        when(equipeRepository.findByNome("Inexistente")).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> equipeService.buscarEquipePorNome("Inexistente"));
+
+        assertTrue(ex.getMessage().contains("Equipe não encontrada"));
+    }
+
+    @Test
+    void deveSalvarEquipeNoRepositorio() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .fundacao(1899)
+                .sede("Barcelona")
+                .build();
+
+        when(equipeRepository.save(any(Equipe.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0)); // simula comportamento real do save()
+
+        equipeService.adicionarEquipe(equipe);
+
+        ArgumentCaptor<Equipe> captor = ArgumentCaptor.forClass(Equipe.class);
+        verify(equipeRepository, times(1)).save(captor.capture());
+
+        Equipe capturada = captor.getValue();
+
+        assertEquals("Barcelona", capturada.getNome(), "O nome da equipe deve ser 'Barcelona'");
+    }
 }
