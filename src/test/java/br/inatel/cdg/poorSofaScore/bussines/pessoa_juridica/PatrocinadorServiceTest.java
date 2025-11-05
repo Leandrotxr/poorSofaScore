@@ -25,8 +25,8 @@ public class PatrocinadorServiceTest {
     @Test
     void deveSalvarNovoPatrocinador() {
 
-        Patrocinador novoPatrocinador = new Patrocinador();
-        novoPatrocinador.setNome("Patrocinador Alpha");
+        Patrocinador novoPatrocinador;
+        novoPatrocinador = Patrocinador.builder().nome("Patrocinador Alpha").build();
 
         patrocinadorService.adicionarPatrocinador(novoPatrocinador);
 
@@ -36,11 +36,15 @@ public class PatrocinadorServiceTest {
     @Test
     void deveRetornarListaDePatrocinadores() {
 
-        Patrocinador p1 = new Patrocinador();
-        p1.setNome("MegaCorp");
+        Patrocinador
+        p1 = Patrocinador.builder().
+                nome("MegaCorp").
+                build();
 
-        Patrocinador p2 = new Patrocinador();
-        p2.setNome("GlobalTech");
+        Patrocinador
+        p2 = Patrocinador.builder().
+                nome("GlobalTech").
+                build();
 
         List<Patrocinador> entidades = List.of(p1, p2);
 
