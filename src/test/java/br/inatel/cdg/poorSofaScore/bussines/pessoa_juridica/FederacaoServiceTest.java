@@ -30,8 +30,9 @@ public class FederacaoServiceTest {
     @Test
     void deveSalvarNovaFederacao() {
 
-        Federacao novaFederacao = new Federacao();
-        novaFederacao.setNome("FIFA Teste");
+        Federacao novaFederacao = Federacao.builder().
+                nome("FIFA teste").
+                build();
 
         federacaoService.adicionarFederacao(novaFederacao);
 
@@ -43,8 +44,9 @@ public class FederacaoServiceTest {
 
         String nomeBusca = "CBF";
 
-        Federacao entidade = new Federacao();
-        entidade.setNome(nomeBusca);
+        Federacao entidade = Federacao.builder().
+                nome(nomeBusca).
+                build();
         entidade.setLista_arbitro(new ArrayList<>());
         entidade.setLista_campeonato(new ArrayList<>());
 
