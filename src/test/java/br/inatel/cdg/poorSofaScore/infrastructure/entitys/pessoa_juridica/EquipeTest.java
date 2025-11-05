@@ -25,7 +25,6 @@ class EquipeTest {
     @Test
     void deveChamarContratarQuandoContratarEhChamado() {
         equipe.contratar(contratavelMock);
-
         verify(contratavelMock, times(1)).contratar(equipe);
         verifyNoMoreInteractions(contratavelMock);
     }
