@@ -4,7 +4,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-@Setter
+
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
