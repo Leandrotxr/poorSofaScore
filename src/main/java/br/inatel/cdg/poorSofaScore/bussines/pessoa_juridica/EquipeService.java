@@ -6,14 +6,12 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNome
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.Patrocinio;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Pessoa;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.EquipeRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
