@@ -1,18 +1,32 @@
 package br.inatel.cdg.poorSofaScore.bussines.campeonatos;
 
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
+import br.inatel.cdg.poorSofaScore.infrastructure.repository.campeonatos.CampeonatoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 public class CampeonatoServiceTest {
+
+    @InjectMocks
+    private CampeonatoService campeonatoService;
+
+    @Mock
+    private CampeonatoRepository campeonatoRepository;
 
     private Campeonato campeonato;
     private Federacao federacaoMock;
@@ -28,7 +42,6 @@ public class CampeonatoServiceTest {
                 .build();
         federacaoMock = Mockito.mock(Federacao.class);
         listaEquipeMock = Mockito.mock(List.class);
-        when(federacaoMock.getLista_campeonato()).thenReturn(listaCampeonatoMock);
     }
 
     @Test
@@ -39,6 +52,7 @@ public class CampeonatoServiceTest {
 
     @Test
     void deveAdicionarCampeonatoNaFederacao() {
+        when(federacaoMock.getLista_campeonato()).thenReturn(listaCampeonatoMock);
         campeonato.setFederacao(federacaoMock);
         assertEquals(federacaoMock.getLista_campeonato(), listaCampeonatoMock);
     }
@@ -47,5 +61,33 @@ public class CampeonatoServiceTest {
     void deveAdicionarEquipe() {
         campeonato.setEquipes(listaEquipeMock);
         assertEquals(listaEquipeMock, campeonato.getEquipes());
+    }
+
+    @Test
+    void deveSalvarNovoCampeonato() {
+
+        Campeonato novoCampeonato = Campeonato.builder().nome("Copa Sul").local("BR").premio(100).build();
+
+        campeonatoService.adicionarCampeonato(novoCampeonato);
+
+        verify(campeonatoRepository, times(1)).save(novoCampeonato);
+    }
+
+
+    @Test
+    void deveRetornarCampeonatoDTO() {
+
+        String nomeBusca = "Liga Teste";
+
+        Campeonato entidade = Campeonato.builder().nome(nomeBusca).local("Paris").premio(500).equipes(List.of()).build();
+
+        when(campeonatoRepository.findByNome(nomeBusca)).thenReturn(Optional.of(entidade));
+
+        CampeonatoDTO resultado = campeonatoService.buscarCampeonatoPorNome(nomeBusca);
+
+        verify(campeonatoRepository, times(1)).findByNome(nomeBusca);
+
+        assertEquals(nomeBusca, resultado.getNome());
+        assertEquals("Paris", resultado.getLocal());
     }
 }
