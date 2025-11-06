@@ -20,7 +20,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class FederacaoServiceTest {
+public class FederacaoServiceTest {
 
     @Mock
     private FederacaoRepository federacaoRepository;
