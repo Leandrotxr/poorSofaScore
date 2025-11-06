@@ -22,7 +22,7 @@ public class PatrocinadorController {
     }
 
     @PostMapping("/adicionarPatrocinador")
-    public void adicionarPAtrocinador(@RequestBody Patrocinador patrocinador) {
+    public void adicionarPatrocinador(@RequestBody Patrocinador patrocinador) {
         patrocinadorService.adicionarPatrocinador(patrocinador);
     }
 }
