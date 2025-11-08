@@ -1,7 +1,6 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.ArbitroService;
-import br.inatel.cdg.poorSofaScore.controller.pessoa_juridica.EquipeController;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroNomeDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
