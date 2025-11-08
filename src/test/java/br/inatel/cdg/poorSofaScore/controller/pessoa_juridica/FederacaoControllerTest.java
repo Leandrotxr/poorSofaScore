@@ -37,6 +37,7 @@ public class FederacaoControllerTest {
         List<FederacaoDTO> resultado = federacaoController.listarFederacoes();
 
         assertEquals(1, resultado.size());
+        assertEquals("fifa", resultado.get(0).getNome());
         verify(federacaoService, times(1)).listarFederacao();
     }
 
