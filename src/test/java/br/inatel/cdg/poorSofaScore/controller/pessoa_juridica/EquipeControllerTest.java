@@ -37,6 +37,7 @@ class EquipeControllerTest {
         List<EquipeDTO> resultado = equipeController.listarEquipes();
 
         assertEquals(1, resultado.size());
+        assertEquals("cruzeiro", resultado.get(0).getNome());
         verify(equipeService, times(1)).listarEquipes();
     }
 
