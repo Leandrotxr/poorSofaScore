@@ -114,24 +114,29 @@ poorSofaScore/
 ---
 
 ## 🔧 Como rodar localmente  
-1. Clone o repositório:  
+1. Clone o repositório:
+   
    ```bash
    git clone https://github.com/Leandrotxr/poorSofaScore.git
    cd poorSofaScore
    ```
 2. Execute:
+   
    ```bash
    ./mvnw spring-boot:run
    ```
    ou
+   
    ```bash
    mvn spring-boot:run
    ```
 3. Acesse no navegador:
+   
    ```cpp
    http://localhost:3000
    ```
 4. Use endpoints (exemplo de visualização das equipes):
+   
    ```cpp
    http://localhost:3000/equipes
    ```
@@ -139,10 +144,12 @@ poorSofaScore/
 ---
 
 ## 🧪 Como rodar testes
+
 ```bash
 mvn test
 ```
 Os resultados ficam em:
+
 ```bash
 target/surefire-reports/
 ```
