@@ -72,6 +72,7 @@ Está configurado um arquivo **Jenkinsfile** na raiz do projeto que define etapa
 - Execução de testes
 - Empacotamento do artefato JAR
 - Deploy simulado
+
 Para usar a Pipeline no Jenkins:
 - Configure no Jenkins o job do tipo **Pipeline** apontando para o repositório
 - O Jenkinsfile será detectado automaticamente
@@ -80,6 +81,6 @@ Para usar a Pipeline no Jenkins:
 ---
 
 ## 👥 Autores
-Projeto desenvolvido por Leandro Teixeira, Pedro Junqueira, Pedro Henrique e Luiz Otávio como parte de estudos em Engenharia de Software (C14)
+Projeto desenvolvido por Leandro Teixeira, Pedro Paulo, Pedro Henrique e Luiz Otávio como parte de estudos em Engenharia de Software (C14)
 
 
