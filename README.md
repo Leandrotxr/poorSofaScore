@@ -43,57 +43,57 @@ poorSofaScore/
 │   │   │       ├── EquipeService.java
 │   │   │       ├── FederacaoService.java
 │   │   │       └── PatrocinadorService.java
-│   │   ├── infrastructure/
-│   │   │   ├── dto/
-│   │   │   │   ├── campeonatos/
-│   │   │   │   │   ├── CampeonatoDTO.java
-│   │   │   │   │   └── CampeonatoNomeDTO.java
-│   │   │   │   ├── intermediaria/
-│   │   │   │   │   └── PatrocinioDTO.java
-│   │   │   │   ├── pessoa_fisica/
-│   │   │   │   │   ├── ArbitroDTO.java
-│   │   │   │   │   ├── ArbitroNomeDTO.java
-│   │   │   │   │   ├── JogadorDTO.java
-│   │   │   │   │   ├── JogadorNomeDTO.java
-│   │   │   │   │   ├── TecnicoDTO.java
-│   │   │   │   │   └── TecnicoNomeDTO.java
-│   │   │   │   └── pessoa_juridica/
-│   │   │   │       ├── EquipeDTO.java
-│   │   │   │       ├── EquipeNomeDTO.java
-│   │   │   │       ├── FederacaoDTO.java
-│   │   │   │       ├── FederacaoNomeDTO.java
-│   │   │   │       ├── PatrocinadorDTO.java
-│   │   │   │       └── PatrocinadorNomeDTO.java
-│   │   │   ├── repository/
-│   │   │   │   ├── campeonatos/
-│   │   │   │   │   └── CampeonatoRepository.java
-│   │   │   │   ├── intermediaria/
-│   │   │   │   │   └── PatrocinioRepository.java
-│   │   │   │   ├── pessoa_fisica/
-│   │   │   │   │   ├── ArbitroRepository.java
-│   │   │   │   │   ├── JogadorRepository.java
-│   │   │   │   │   └── TecnicoRepository.java
-│   │   │   │   └── pessoa_juridica/
-│   │   │   │       ├── EquipeRepository.java
-│   │   │   │       ├── FederacaoRepository.java
-│   │   │   │       └── PatrocinadorRepository.java
-│   │   │   └── entitys/
-│   │   │       ├── campeonatos/
-│   │   │       │   └── Campeonato.java
-│   │   │       ├── intermediaria/
-│   │   │       │   ├── Patrocinio.java
-│   │   │       │   └── interfaces/
-│   │   │       │       └── Contratavel.java
-│   │   │       ├── pessoa_fisica/
-│   │   │       │   ├── Arbitro.java
-│   │   │       │   ├── Jogador.java
-│   │   │       │   ├── Pessoa.java
-│   │   │       │   └── Tecnico.java
-│   │   │       └── pessoa_juridica/
-│   │   │           ├── Empresa.java
-│   │   │           ├── Equipe.java
-│   │   │           ├── Federacao.java
-│   │   │           └── Patrocinador.java
+│   │   └── infrastructure/
+│   │       ├── dto/
+│   │       │   ├── campeonatos/
+│   │       │   │   ├── CampeonatoDTO.java
+│   │       │   │   └── CampeonatoNomeDTO.java
+│   │       │   ├── intermediaria/
+│   │       │   │   └── PatrocinioDTO.java
+│   │       │   ├── pessoa_fisica/
+│   │       │   │   ├── ArbitroDTO.java
+│   │       │   │   ├── ArbitroNomeDTO.java
+│   │       │   │   ├── JogadorDTO.java
+│   │       │   │   ├── JogadorNomeDTO.java
+│   │       │   │   ├── TecnicoDTO.java
+│   │       │   │   └── TecnicoNomeDTO.java
+│   │       │   └── pessoa_juridica/
+│   │       │       ├── EquipeDTO.java
+│   │       │       ├── EquipeNomeDTO.java
+│   │       │       ├── FederacaoDTO.java
+│   │       │       ├── FederacaoNomeDTO.java
+│   │       │       ├── PatrocinadorDTO.java
+│   │       │       └── PatrocinadorNomeDTO.java
+│   │       ├── repository/
+│   │       │   ├── campeonatos/
+│   │       │   │   └── CampeonatoRepository.java
+│   │       │   ├── intermediaria/
+│   │       │   │   └── PatrocinioRepository.java
+│   │       │   ├── pessoa_fisica/
+│   │       │   │   ├── ArbitroRepository.java
+│   │       │   │   ├── JogadorRepository.java
+│   │       │   │   └── TecnicoRepository.java
+│   │       │   └── pessoa_juridica/
+│   │       │       ├── EquipeRepository.java
+│   │       │       ├── FederacaoRepository.java
+│   │       │       └── PatrocinadorRepository.java
+│   │       └── entitys/
+│   │           ├── campeonatos/
+│   │           │   └── Campeonato.java
+│   │           ├── intermediaria/
+│   │           │   ├── Patrocinio.java
+│   │           │   └── interfaces/
+│   │           │       └── Contratavel.java
+│   │           ├── pessoa_fisica/
+│   │           │   ├── Arbitro.java
+│   │           │   ├── Jogador.java
+│   │           │   ├── Pessoa.java
+│   │           │   └── Tecnico.java
+│   │           └── pessoa_juridica/
+│   │               ├── Empresa.java
+│   │               ├── Equipe.java
+│   │               ├── Federacao.java
+│   │               └── Patrocinador.java
 │   └── test/java/br/inatel/cdg/poorSofaScore/
 │       ├── PoorSofaScoreApplicationTests.java
 │       ├── controller/
