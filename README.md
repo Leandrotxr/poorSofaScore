@@ -17,7 +17,7 @@ Uma aplicação em Spring Boot para gestão de organizações futebolísticas.
 ```bash
 Maven standard layout  
 ├─ src/main/java → classes de entidade, repositório, serviço e controller  
-├─ src/test/java → testes com Mockito e JUnit 5  
+├─ src/test/java → testes com Mockito, JUnit 5 e WebMVC Test
 └─ pom.xml → dependências e plugins  
 ```
 ---
