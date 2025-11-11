@@ -1,5 +1,5 @@
 # poorSofaScore  
-Uma aplicação demo em Spring Boot para gestão de patrocinadores, equipes e jogadores — com foco em aprender integração contínua (CI) e entrega contínua (CD).
+Uma aplicação em Spring Boot para gestão de organizações futebolísticas.
 
 ---
 
@@ -35,3 +35,51 @@ Maven standard layout
    git clone https://github.com/Leandrotxr/poorSofaScore.git
    cd poorSofaScore
    ```
+2. Execute:
+   ```bash
+   ./mvnw spring-boot:run
+   ```
+   ou
+   ```bash
+   mvn spring-boot:run
+   ```
+3. Acesse no navegador:
+   ```cpp
+   http://localhost:3000
+   ```
+4. Use endpoints (exemplo de visualização das equipes):
+   ```cpp
+   http://localhost:3000/equipes
+   ```
+
+---
+
+## 🧪 Como rodar testes
+```bash
+mvn test
+```
+Os resultados ficam em:
+```bash
+target/surefire-reports/
+```
+
+---
+
+## 🔄 Pipeline (CI/CD)
+Está configurado um arquivo **Jenkinsfile** na raiz do projeto que define etapas automáticas:
+- Checkout do código
+- Build do projeto
+- Execução de testes
+- Empacotamento do artefato JAR
+- Deploy simulado
+Para usar a Pipeline no Jenkins:
+- Configure no Jenkins o job do tipo **Pipeline** apontando para o repositório
+- O Jenkinsfile será detectado automaticamente
+- Basta usar o **Build Now** no Jenkins
+
+---
+
+## 👥 Autores
+Projeto desenvolvido por Leandro Teixeira, Pedro Junqueira, Pedro Henrique e Luiz Otávio como parte de estudos em Engenharia de Software (C14)
+
+
