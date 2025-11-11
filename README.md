@@ -15,10 +15,93 @@ Uma aplicação em Spring Boot para gestão de organizações futebolísticas.
 
 ## 🧱 Estrutura do projeto  
 ```bash
-Maven standard layout  
-├─ src/main/java → classes de entidade, repositório, serviço e controller  
-├─ src/test/java → testes com Mockito, JUnit 5 e WebMVC Test
-└─ pom.xml → dependências e plugins  
+poorSofaScore/
+├── src/
+│   ├── main/java/br/inatel/cdg/poorSofaScore/
+│   │   ├── PoorSofaScoreApplication.java
+│   │   ├── config/
+│   │   │   └── DataLoader.java
+│   │   ├── controller/
+│   │   │   ├── campeonatos/
+│   │   │   │   └── CampeonatoController.java
+│   │   │   ├── pessoa_fisica/
+│   │   │   │   ├── ArbitroController.java
+│   │   │   │   ├── JogadorController.java
+│   │   │   │   └── TecnicoController.java
+│   │   │   └── pessoa_juridica/
+│   │   │       ├── EquipeController.java
+│   │   │       ├── FederacaoController.java
+│   │   │       └── PatrocinadorController.java
+│   │   ├── bussines/
+│   │   │   ├── campeonatos/
+│   │   │   │   └── CampeonatoService.java
+│   │   │   ├── pessoa_fisica/
+│   │   │   │   ├── ArbitroService.java
+│   │   │   │   ├── JogadorService.java
+│   │   │   │   └── TecnicoService.java
+│   │   │   └── pessoa_juridica/
+│   │   │       ├── EquipeService.java
+│   │   │       ├── FederacaoService.java
+│   │   │       └── PatrocinadorService.java
+│   │   ├── infrastructure/
+│   │   │   ├── dto/
+│   │   │   │   ├── campeonatos/
+│   │   │   │   │   ├── CampeonatoDTO.java
+│   │   │   │   │   └── CampeonatoNomeDTO.java
+│   │   │   │   ├── intermediaria/
+│   │   │   │   │   └── PatrocinioDTO.java
+│   │   │   │   ├── pessoa_fisica/
+│   │   │   │   │   ├── ArbitroDTO.java
+│   │   │   │   │   ├── ArbitroNomeDTO.java
+│   │   │   │   │   ├── JogadorDTO.java
+│   │   │   │   │   ├── JogadorNomeDTO.java
+│   │   │   │   │   ├── TecnicoDTO.java
+│   │   │   │   │   └── TecnicoNomeDTO.java
+│   │   │   │   └── pessoa_juridica/
+│   │   │   │       ├── EquipeDTO.java
+│   │   │   │       ├── EquipeNomeDTO.java
+│   │   │   │       ├── FederacaoDTO.java
+│   │   │   │       ├── FederacaoNomeDTO.java
+│   │   │   │       ├── PatrocinadorDTO.java
+│   │   │   │       └── PatrocinadorNomeDTO.java
+│   │   │   ├── repository/
+│   │   │   │   ├── campeonatos/
+│   │   │   │   │   └── CampeonatoRepository.java
+│   │   │   │   ├── intermediaria/
+│   │   │   │   │   └── PatrocinioRepository.java
+│   │   │   │   ├── pessoa_fisica/
+│   │   │   │   │   ├── ArbitroRepository.java
+│   │   │   │   │   ├── JogadorRepository.java
+│   │   │   │   │   └── TecnicoRepository.java
+│   │   │   │   └── pessoa_juridica/
+│   │   │   │       ├── EquipeRepository.java
+│   │   │   │       ├── FederacaoRepository.java
+│   │   │   │       └── PatrocinadorRepository.java
+│   │   │   └── entitys/
+│   │   │       ├── campeonatos/
+│   │   │       │   └── Campeonato.java
+│   │   │       ├── intermediaria/
+│   │   │       │   ├── Patrocinio.java
+│   │   │       │   └── interfaces/
+│   │   │       │       └── Contratavel.java
+│   │   │       ├── pessoa_fisica/
+│   │   │       │   ├── Arbitro.java
+│   │   │       │   ├── Jogador.java
+│   │   │       │   ├── Pessoa.java
+│   │   │       │   └── Tecnico.java
+│   │   │       └── pessoa_juridica/
+│   │   │           ├── Empresa.java
+│   │   │           ├── Equipe.java
+│   │   │           ├── Federacao.java
+│   │   │           └── Patrocinador.java
+│   └── test/java/br/inatel/cdg/poorSofaScore/
+│       ├── PoorSofaScoreApplicationTests.java
+│       ├── controller/
+│       ├── infrastructure/
+│       ├── bussines/
+│       └── entitys/
+├── pom.xml
+└── Jenkinsfile
 ```
 ---
 
