@@ -1,4 +1,4 @@
-# poorSofaScore  
+# Poor SofaScore  
 Uma aplicação em Spring Boot para gestão de organizações futebolísticas.
 
 ---
