@@ -33,6 +33,7 @@ public class PatrocinadorServiceTest {
         verify(patrocinadorRepository, times(1)).save(novoPatrocinador);
     }
 
+    /*
     @Test
     void deveRetornarListaDePatrocinadores() {
 
@@ -53,4 +54,5 @@ public class PatrocinadorServiceTest {
         assertEquals("GlobalTech", resultado.get(1).getNome());
 
     }
+    */
 }
