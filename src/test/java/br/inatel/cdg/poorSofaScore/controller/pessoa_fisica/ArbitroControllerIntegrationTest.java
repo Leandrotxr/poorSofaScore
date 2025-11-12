@@ -3,6 +3,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.ArbitroService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +66,15 @@ public class ArbitroControllerIntegrationTest {
     // ---------- TESTE POST /arbitros/adicionarArbitro ----------
     @Test
     void deveAdicionarArbitro() throws Exception {
-        ArbitroDTO dto = ArbitroDTO.builder().nome("Daronco").build();
+        Arbitro dto = Arbitro.builder()
+                .nome("Daronco")
+                .cpf("123456789")
+                .idade(45)
+                .build();
 
         mockMvc.perform(post("/arbitros/adicionarArbitro")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }

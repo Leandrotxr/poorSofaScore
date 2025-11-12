@@ -45,7 +45,14 @@ public class ArbitroService {
                 .build();
     }
 
-    public void adicionarArbitro(Arbitro arbitro) {
-        arbitroRepository.save(arbitro);
+    public Arbitro adicionarArbitro(Arbitro arbitro) {
+        if(arbitro.getNome() == null || arbitro.getNome().isBlank())
+            throw new IllegalArgumentException("Nome do arbitro é obrigatório");
+        if(arbitro.getCpf() == null || arbitro.getCpf().isBlank())
+            throw new IllegalArgumentException("CPF do arbitro é obrigatório");
+        if(arbitro.getIdade() <= 0)
+            throw new IllegalArgumentException("Idade do arbitro é obrigatório");
+
+        return arbitroRepository.save(arbitro);
     }
 }
