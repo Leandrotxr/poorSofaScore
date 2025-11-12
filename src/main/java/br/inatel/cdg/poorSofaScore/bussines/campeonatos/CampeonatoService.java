@@ -64,7 +64,17 @@ public class CampeonatoService {
                 .build();
     }
 
-    public void adicionarCampeonato(Campeonato campeonato) {
-        campeonatoRepository.save(campeonato);
+    public Campeonato adicionarCampeonato(Campeonato campeonato) {
+        if(campeonato.getNome() == null || campeonato.getNome().isBlank()) {
+            throw new IllegalArgumentException("Nome do campeonato é obrigatório");
+        }
+        if(campeonato.getLocal() == null || campeonato.getLocal().isBlank()) {
+            throw new IllegalArgumentException("Local do campeonato é obrigatório");
+        }
+        if(campeonato.getPremio() <= 0) {
+            throw new IllegalArgumentException("Prêmio do campeonato é obrigatório");
+        }
+
+        return campeonatoRepository.save(campeonato);
     }
 }
