@@ -48,7 +48,16 @@ public class TecnicoService {
                 .build();
     }
 
-    public void adicionarTecnico(Tecnico tecnico) {
-        tecnicoRepository.save(tecnico);
+    public Tecnico adicionarTecnico(Tecnico tecnico) {
+        if(tecnico.getNome() == null || tecnico.getNome().isBlank())
+            throw new IllegalArgumentException("Nome do tecnico é obrigatório");
+        if(tecnico.getCpf() == null || tecnico.getCpf().isBlank())
+            throw new IllegalArgumentException("CPF do tecnico é obrigatório");
+        if(tecnico.getIdade() <= 0)
+            throw new IllegalArgumentException("Idade do tecnico é obrigatório");
+        if(tecnico.getNacionalidade() == null || tecnico.getNacionalidade().isBlank())
+            throw new IllegalArgumentException("Nacionalidade do tecnico é obrigatório");
+
+        return tecnicoRepository.save(tecnico);
     }
 }

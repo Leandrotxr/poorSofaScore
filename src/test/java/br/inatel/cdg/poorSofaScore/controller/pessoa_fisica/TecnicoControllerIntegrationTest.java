@@ -3,6 +3,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.TecnicoService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +66,16 @@ public class TecnicoControllerIntegrationTest {
     // ---------- TESTE POST /tecnicos/adicionarTecnico ----------
     @Test
     void deveAdicionarJogador() throws Exception {
-        TecnicoDTO dto = TecnicoDTO.builder().nome("Guardiola").build();
+        Tecnico dto = Tecnico.builder()
+                .nome("Guardiola")
+                .cpf("123456789")
+                .idade(63)
+                .nacionalidade("espanhol")
+                .build();
 
         mockMvc.perform(post("/tecnicos/adicionarTecnico")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }
