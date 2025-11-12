@@ -16,7 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,7 +27,6 @@ public class CampeonatoServiceTest {
 
     @Mock
     private CampeonatoRepository campeonatoRepository;
-
     private Campeonato campeonato;
     private Federacao federacaoMock;
     private List<Equipe> listaEquipeMock;
@@ -35,11 +34,6 @@ public class CampeonatoServiceTest {
 
     @BeforeEach
     void setUp() {
-        campeonato = Campeonato.builder()
-                .nome("Premier League")
-                .local("Inglaterra")
-                .premio(200000000)
-                .build();
         federacaoMock = Mockito.mock(Federacao.class);
         listaEquipeMock = Mockito.mock(List.class);
     }
@@ -89,5 +83,43 @@ public class CampeonatoServiceTest {
 
         assertEquals(nomeBusca, resultado.getNome());
         assertEquals("Paris", resultado.getLocal());
+    }
+
+    @Test
+    void deveLancarExcecao_QuandoNomeForNulo() {
+        campeonato = Campeonato.builder()
+                .local("Inglaterra")
+                .premio(200000000)
+                .build();
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                campeonatoService.adicionarCampeonato(campeonato));
+
+        assertEquals("Nome do campeonato é obrigatório", ex.getMessage());
+
+    }
+
+    @Test
+    void deveLancarExcecao_QuandoLocalForNulo() {
+        campeonato = Campeonato.builder()
+                .nome("Premier League")
+                .premio(200000000)
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                campeonatoService.adicionarCampeonato(campeonato));
+
+        assertEquals("Local do campeonato é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecao_QuandoPremioForZero() {
+        campeonato = Campeonato.builder()
+                .nome("Premier League")
+                .local("Inglaterra")
+                .build();
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                campeonatoService.adicionarCampeonato(campeonato));
+
+        assertEquals("Prêmio do campeonato é obrigatório", ex.getMessage());
     }
 }
