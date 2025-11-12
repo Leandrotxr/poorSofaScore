@@ -95,7 +95,16 @@ public class EquipeService {
                 .build();
     }
 
-    public void adicionarEquipe(Equipe equipe) {
-        equipeRepository.save(equipe);
+    public Equipe adicionarEquipe(Equipe equipe) {
+        if(equipe.getNome() == null || equipe.getNome().isBlank())
+            throw new IllegalArgumentException("Nome da equipe é obrigatório");
+        if(equipe.getCnpj() == null || equipe.getCnpj().isBlank())
+            throw new IllegalArgumentException("CNPJ da equipe é obrigatório");
+        if(equipe.getFundacao() <= 0)
+            throw new IllegalArgumentException("Fundação da equipe é obrigatório");
+        if(equipe.getSede() == null || equipe.getSede().isBlank())
+            throw new IllegalArgumentException("Sede da equipe é obrigatório");
+
+        return equipeRepository.save(equipe);
     }
 }

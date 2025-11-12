@@ -6,6 +6,9 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,7 +36,8 @@ public class EquipeController {
     }
 
     @PostMapping("/adicionarEquipe")
-    public void adicionarEquipe(@RequestBody Equipe equipe) {
-        equipeService.adicionarEquipe(equipe);
+    public ResponseEntity<Equipe> adicionarEquipe(@Validated @RequestBody Equipe equipe) {
+        Equipe novaEquipe = equipeService.adicionarEquipe(equipe);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novaEquipe);
     }
 }
