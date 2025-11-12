@@ -5,6 +5,9 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +35,8 @@ public class CampeonatoController {
     }
 
     @PostMapping("/adicionarCampeonato")
-    public void adicionarCampeonato(@RequestBody Campeonato campeonato) {
-        campeonatoService.adicionarCampeonato(campeonato);
+    public ResponseEntity<Campeonato> adicionarCampeonato(@Validated @RequestBody Campeonato campeonato) {
+        Campeonato novoCampeonato = campeonatoService.adicionarCampeonato(campeonato);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoCampeonato);
     }
 }

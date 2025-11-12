@@ -64,12 +64,16 @@ public class CampeonatoControllerIntegrationTest {
 
     // ---------- TESTE POST /campeonatos/adicionarCampeonato ----------
     @Test
-    void deveAdicionarArbitro() throws Exception {
-        CampeonatoDTO dto = CampeonatoDTO.builder().nome("Libertadores").build();
+    void deveAdicionarCampeonato() throws Exception {
+        CampeonatoDTO dto = CampeonatoDTO.builder()
+                .nome("Libertadores")
+                .local("Brasil")
+                .premio(1000000)
+                .build();
 
         mockMvc.perform(post("/campeonatos/adicionarCampeonato")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }
