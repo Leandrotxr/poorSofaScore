@@ -123,7 +123,8 @@ public class FederacaoServiceTest {
     @Test
     void deveSalvarFederacaoNoRepositorio() {
         Federacao federacao = Federacao.builder()
-                .nome("Barcelona")
+                .nome("CBF")
+                .cnpj("123456789")
                 .build();
 
         when(federacaoRepository.save(any(Federacao.class)))
@@ -136,6 +137,34 @@ public class FederacaoServiceTest {
 
         Federacao capturada = captor.getValue();
 
-        assertEquals("Barcelona", capturada.getNome(), "O nome da equipe deve ser 'Barcelona'");
+        assertEquals("CBF", capturada.getNome(), "O nome da equipe deve ser 'Barcelona'");
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNomeForNuloOuVazio() {
+        Federacao federacao = Federacao.builder()
+                .cnpj("123456789")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> federacaoService.adicionarFederacao(federacao)
+        );
+
+        assertEquals("Nome da federacao é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCnpjForNuloOuVazio() {
+        Federacao federacao = Federacao.builder()
+                .nome("CBF")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> federacaoService.adicionarFederacao(federacao)
+        );
+
+        assertEquals("CNPJ da federacao é obrigatório", ex.getMessage());
     }
 }

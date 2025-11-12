@@ -61,7 +61,12 @@ public class FederacaoService {
                 .build();
     }
 
-    public void adicionarFederacao(Federacao federacao) {
-        federacaoRepository.save(federacao);
+    public Federacao adicionarFederacao(Federacao federacao) {
+        if(federacao.getNome() == null || federacao.getNome().isBlank())
+            throw new IllegalArgumentException("Nome da federacao é obrigatório");
+        if(federacao.getCnpj() == null || federacao.getCnpj().isBlank())
+            throw new IllegalArgumentException("CNPJ da federacao é obrigatório");
+
+        return federacaoRepository.save(federacao);
     }
 }
