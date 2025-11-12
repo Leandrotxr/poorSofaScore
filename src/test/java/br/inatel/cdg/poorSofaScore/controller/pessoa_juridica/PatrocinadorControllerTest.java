@@ -27,7 +27,7 @@ public class PatrocinadorControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /patrocinador/nomes
+    // Teste para GET /patrocinadores/nomes
     @Test
     void deveListarNomesDosPatrocinador() {
         PatrocinadorNomeDTO patrocinadorNomeDTO = new PatrocinadorNomeDTO("nike");
@@ -39,7 +39,7 @@ public class PatrocinadorControllerTest {
         verify(patrocinadorService, times(1)).listarNome();
     }
 
-    // Teste para POST /patrocinador/adicionarPatrocinador
+    // Teste para POST /patrocinadores/adicionarPatrocinador
     @Test
     void deveAdicionarPatrocinador() {
         Patrocinador patrocinador = new Patrocinador();

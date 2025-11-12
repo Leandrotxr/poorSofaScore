@@ -29,45 +29,45 @@ public class FederacaoControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /federacao ----------
+    // ---------- TESTE GET /federacoes ----------
     @Test
     void deveListarFederacao() throws Exception {
         FederacaoDTO dto = FederacaoDTO.builder().nome("Fifa").build();
         when(federacaoService.listarFederacao()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/federacao"))
+        mockMvc.perform(get("/federacoes"))
                 .andExpect(status().isOk()) // HTTP 200
                 .andExpect(jsonPath("$[0].nome").value("Fifa"));
     }
 
-    // ---------- TESTE GET /federacao/nomes ----------
+    // ---------- TESTE GET /federacoes/nomes ----------
     @Test
     void deveListarNomesDasFederacoes() throws Exception {
         FederacaoNomeDTO nomeDTO = new FederacaoNomeDTO("Fifa");
         when(federacaoService.listarNome()).thenReturn(List.of(nomeDTO));
 
-        mockMvc.perform(get("/federacao/nomes"))
+        mockMvc.perform(get("/federacoes/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Fifa"));
     }
 
-    // ---------- TESTE GET /federacao/{nome} ----------
+    // ---------- TESTE GET /federacoes/{nome} ----------
     @Test
     void deveBuscarFederacaoPorNome() throws Exception {
         FederacaoDTO dto = FederacaoDTO.builder().nome("Fifa").build();
         when(federacaoService.buscarFederacaoPorNome("Fifa")).thenReturn(dto);
 
-        mockMvc.perform(get("/federacao/Fifa"))
+        mockMvc.perform(get("/federacoes/Fifa"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Fifa"));
     }
 
-    // ---------- TESTE POST /federacao/adicionarFederacao ----------
+    // ---------- TESTE POST /federacoes/adicionarFederacao ----------
     @Test
     void deveAdicionarFederacao() throws Exception {
         FederacaoDTO dto = FederacaoDTO.builder().nome("Fifa").build();
 
-        mockMvc.perform(post("/federacao/adicionarFederacao")
+        mockMvc.perform(post("/federacoes/adicionarFederacao")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

@@ -29,45 +29,45 @@ public class CampeonatoControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /campeonato ----------
+    // ---------- TESTE GET /campeonatos ----------
     @Test
     void deveListarCampeonato() throws Exception {
         CampeonatoDTO dto = CampeonatoDTO.builder().nome("Libertadores").build();
         when(campeonatoService.listarCampeonatos()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/campeonato"))
+        mockMvc.perform(get("/campeonatos"))
                 .andExpect(status().isOk()) // HTTP 200
                 .andExpect(jsonPath("$[0].nome").value("Libertadores"));
     }
 
-    // ---------- TESTE GET /campeonato/nomes ----------
+    // ---------- TESTE GET /campeonatos/nomes ----------
     @Test
     void deveListarNomesDosCampeonatos() throws Exception {
         CampeonatoNomeDTO campeonatoNomeDTO = new CampeonatoNomeDTO("Libertadores");
         when(campeonatoService.listarNome()).thenReturn(List.of(campeonatoNomeDTO));
 
-        mockMvc.perform(get("/campeonato/nomes"))
+        mockMvc.perform(get("/campeonatos/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Libertadores"));
     }
 
-    // ---------- TESTE GET /campeonato/{nome} ----------
+    // ---------- TESTE GET /campeonatos/{nome} ----------
     @Test
     void deveBuscarCampeonatoPorNome() throws Exception {
         CampeonatoDTO dto = CampeonatoDTO.builder().nome("Libertadores").build();
         when(campeonatoService.buscarCampeonatoPorNome("Libertadores")).thenReturn(dto);
 
-        mockMvc.perform(get("/campeonato/Libertadores"))
+        mockMvc.perform(get("/campeonatos/Libertadores"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Libertadores"));
     }
 
-    // ---------- TESTE POST /campeonato/adicionarCampeonato ----------
+    // ---------- TESTE POST /campeonatos/adicionarCampeonato ----------
     @Test
     void deveAdicionarArbitro() throws Exception {
         CampeonatoDTO dto = CampeonatoDTO.builder().nome("Libertadores").build();
 
-        mockMvc.perform(post("/campeonato/adicionarCampeonato")
+        mockMvc.perform(post("/campeonatos/adicionarCampeonato")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

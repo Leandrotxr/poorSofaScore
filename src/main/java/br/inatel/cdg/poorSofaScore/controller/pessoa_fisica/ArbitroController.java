@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/arbitro")
+@RequestMapping("/arbitros")
 public class ArbitroController {
 
     @Autowired

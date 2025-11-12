@@ -28,7 +28,7 @@ public class ArbitroControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /arbitro
+    // Teste para GET /arbitros
     @Test
     void deveListarArbitros() {
         ArbitroDTO arbitroDTO = ArbitroDTO.builder().nome("Daronco").build();
@@ -41,7 +41,7 @@ public class ArbitroControllerTest {
         verify(arbitroService, times(1)).listarArbitros();
     }
 
-    // Teste para GET /arbitro/nomes
+    // Teste para GET /arbitros/nomes
     @Test
     void deveListarNomesDosArbitros() {
         ArbitroNomeDTO arbitroNomeDTO = new ArbitroNomeDTO("Daronco");
@@ -53,7 +53,7 @@ public class ArbitroControllerTest {
         verify(arbitroService, times(1)).listarNome();
     }
 
-    // Teste para GET /arbitro/{nome}
+    // Teste para GET /arbitros/{nome}
     @Test
     void deveBuscarArbitroPorNome() {
         ArbitroDTO arbitroDTO = ArbitroDTO.builder().nome("Daronco").build();
@@ -65,7 +65,7 @@ public class ArbitroControllerTest {
         verify(arbitroService, times(1)).buscarArbitroPorNome("Daronco");
     }
 
-    // Teste para POST /arbitro/adicionarArbitro
+    // Teste para POST /arbitros/adicionarArbitro
     @Test
     void deveAdicionarArbitro() {
         Arbitro arbitro = new Arbitro();

@@ -28,7 +28,7 @@ public class FederacaoControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /federacao
+    // Teste para GET /federacoes
     @Test
     void deveListarFederacoes() {
         FederacaoDTO federacaoDTO = FederacaoDTO.builder().nome("fifa").build();
@@ -41,7 +41,7 @@ public class FederacaoControllerTest {
         verify(federacaoService, times(1)).listarFederacao();
     }
 
-    // Teste para GET /federacao/nomes
+    // Teste para GET /federacoes/nomes
     @Test
     void deveListarNomesDasFederacoes() {
         FederacaoNomeDTO federacaoNomeDTO = new FederacaoNomeDTO("fifa");
@@ -53,7 +53,7 @@ public class FederacaoControllerTest {
         verify(federacaoService, times(1)).listarNome();
     }
 
-    // Teste para GET /federacao/{nome}
+    // Teste para GET /federacoes/{nome}
     @Test
     void deveBuscarFederacaoPorNome() {
         FederacaoDTO federacaoDTO = FederacaoDTO.builder().nome("fifa").build();
@@ -65,7 +65,7 @@ public class FederacaoControllerTest {
         verify(federacaoService, times(1)).buscarFederacaoPorNome("fifa");
     }
 
-    // Teste para POST /federacao/adicionarFederacao
+    // Teste para POST /federacoes/adicionarFederacao
     @Test
     void deveAdicionarFederacao() {
         Federacao federacao = new Federacao();

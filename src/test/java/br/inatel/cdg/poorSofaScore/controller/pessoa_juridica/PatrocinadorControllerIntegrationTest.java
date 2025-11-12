@@ -29,23 +29,23 @@ public class PatrocinadorControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /patrocinador/nomes ----------
+    // ---------- TESTE GET /patrocinadores/nomes ----------
     @Test
     void deveListarNomesDosPatrocinadores() throws Exception {
         PatrocinadorNomeDTO nomeDTO = new PatrocinadorNomeDTO("Puma");
         when(patrocinadorService.listarNome()).thenReturn(List.of(nomeDTO));
 
-        mockMvc.perform(get("/patrocinador/nomes"))
+        mockMvc.perform(get("/patrocinadores/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Puma"));
     }
 
-    // ---------- TESTE POST /patrocinador/adicionarPatrocinador ----------
+    // ---------- TESTE POST /patrocinadores/adicionarPatrocinador ----------
     @Test
     void deveAdicionarPatrocinador() throws Exception {
         PatrocinadorDTO dto = PatrocinadorDTO.builder().nome("Puma").build();
 
-        mockMvc.perform(post("/patrocinador/adicionarPatrocinador")
+        mockMvc.perform(post("/patrocinadores/adicionarPatrocinador")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

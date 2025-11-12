@@ -29,24 +29,24 @@ public class TecnicoControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /tecnico ----------
+    // ---------- TESTE GET /tecnicos ----------
     @Test
     void deveListarTecnico() throws Exception {
         TecnicoDTO dto = TecnicoDTO.builder().nome("Guardiola").build();
         when(tecnicoService.listarTecnicos()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/tecnico"))
+        mockMvc.perform(get("/tecnicos"))
                 .andExpect(status().isOk()) // HTTP 200
                 .andExpect(jsonPath("$[0].nome").value("Guardiola"));
     }
 
-    // ---------- TESTE GET /jogador/nomes ----------
+    // ---------- TESTE GET /tecnicos/nomes ----------
     @Test
     void deveListarNomesDosTecnicos() throws Exception {
         TecnicoNomeDTO tecnicoNomeDTO = new TecnicoNomeDTO("Guardiola");
         when(tecnicoService.listarNome()).thenReturn(List.of(tecnicoNomeDTO));
 
-        mockMvc.perform(get("/tecnico/nomes"))
+        mockMvc.perform(get("/tecnicos/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Guardiola"));
     }
@@ -57,17 +57,17 @@ public class TecnicoControllerIntegrationTest {
         TecnicoDTO dto = TecnicoDTO.builder().nome("Guardiola").build();
         when(tecnicoService.buscarTecnicoPorNome("Guardiola")).thenReturn(dto);
 
-        mockMvc.perform(get("/tecnico/Guardiola"))
+        mockMvc.perform(get("/tecnicos/Guardiola"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Guardiola"));
     }
 
-    // ---------- TESTE POST /jogador/adicionarJogador ----------
+    // ---------- TESTE POST /tecnicos/adicionarTecnico ----------
     @Test
     void deveAdicionarJogador() throws Exception {
         TecnicoDTO dto = TecnicoDTO.builder().nome("Guardiola").build();
 
-        mockMvc.perform(post("/tecnico/adicionarTecnico")
+        mockMvc.perform(post("/tecnicos/adicionarTecnico")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

@@ -27,7 +27,7 @@ public class TecnicoControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /tecnico
+    // Teste para GET /tecnicos
     @Test
     void deveListarTecnicos() {
         TecnicoDTO tecnicoDTO = TecnicoDTO.builder().nome("Guardiola").build();
@@ -40,7 +40,7 @@ public class TecnicoControllerTest {
         verify(tecnicoService, times(1)).listarTecnicos();
     }
 
-    // Teste para GET /tecnico/nomes
+    // Teste para GET /tecnicos/nomes
     @Test
     void deveListarNomesDosTecnicos() {
         TecnicoNomeDTO tecnicoNomeDTO = new TecnicoNomeDTO("Guardiola");
@@ -52,7 +52,7 @@ public class TecnicoControllerTest {
         verify(tecnicoService, times(1)).listarNome();
     }
 
-    // Teste para GET /tecnico/{nome}
+    // Teste para GET /tecnicos/{nome}
     @Test
     void deveBuscarTecnicoPorNome() {
         TecnicoDTO tecnicoDTO = TecnicoDTO.builder().nome("Guardiola").build();
@@ -64,7 +64,7 @@ public class TecnicoControllerTest {
         verify(tecnicoService, times(1)).buscarTecnicoPorNome("Guardiola");
     }
 
-    // Teste para POST /tecnico/adicionarTecnico
+    // Teste para POST /tecnicos/adicionarTecnico
     @Test
     void deveAdicionarTecnico() {
         Tecnico tecnico = new Tecnico();

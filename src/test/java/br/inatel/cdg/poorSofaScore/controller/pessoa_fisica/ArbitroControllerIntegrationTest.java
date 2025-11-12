@@ -29,45 +29,45 @@ public class ArbitroControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /arbitro ----------
+    // ---------- TESTE GET /arbitros ----------
     @Test
     void deveListarArbitro() throws Exception {
         ArbitroDTO dto = ArbitroDTO.builder().nome("Daronco").build();
         when(arbitroService.listarArbitros()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/arbitro"))
+        mockMvc.perform(get("/arbitros"))
                 .andExpect(status().isOk()) // HTTP 200
                 .andExpect(jsonPath("$[0].nome").value("Daronco"));
     }
 
-    // ---------- TESTE GET /arbitro/nomes ----------
+    // ---------- TESTE GET /arbitros/nomes ----------
     @Test
     void deveListarNomesDosArbitros() throws Exception {
         ArbitroNomeDTO arbitroNomeDTO = new ArbitroNomeDTO("Daronco");
         when(arbitroService.listarNome()).thenReturn(List.of(arbitroNomeDTO));
 
-        mockMvc.perform(get("/arbitro/nomes"))
+        mockMvc.perform(get("/arbitros/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Daronco"));
     }
 
-    // ---------- TESTE GET /arbitro/{nome} ----------
+    // ---------- TESTE GET /arbitros/{nome} ----------
     @Test
     void deveBuscarArbitroPorNome() throws Exception {
         ArbitroDTO dto = ArbitroDTO.builder().nome("Daronco").build();
         when(arbitroService.buscarArbitroPorNome("Daronco")).thenReturn(dto);
 
-        mockMvc.perform(get("/arbitro/Daronco"))
+        mockMvc.perform(get("/arbitros/Daronco"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Daronco"));
     }
 
-    // ---------- TESTE POST /arbitro/adicionarArbitro ----------
+    // ---------- TESTE POST /arbitros/adicionarArbitro ----------
     @Test
     void deveAdicionarArbitro() throws Exception {
         ArbitroDTO dto = ArbitroDTO.builder().nome("Daronco").build();
 
-        mockMvc.perform(post("/arbitro/adicionarArbitro")
+        mockMvc.perform(post("/arbitros/adicionarArbitro")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

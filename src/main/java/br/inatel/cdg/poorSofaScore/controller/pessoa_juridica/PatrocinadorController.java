@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/patrocinador")
+@RequestMapping("/patrocinadores")
 public class PatrocinadorController {
 
     @Autowired
