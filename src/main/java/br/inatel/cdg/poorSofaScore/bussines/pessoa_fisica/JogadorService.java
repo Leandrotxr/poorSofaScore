@@ -2,7 +2,6 @@ package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.JogadorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,18 @@ public class JogadorService {
                 .build();
     }
 
-    public void adicionarJogador(Jogador jogador) {
-        jogadorRepository.save(jogador);
+    public Jogador adicionarJogador(Jogador jogador) {
+        if(jogador.getNome() == null || jogador.getNome().isBlank())
+            throw new IllegalArgumentException("Nome do jogador é obrigatório");
+        if(jogador.getCpf() == null || jogador.getCpf().isBlank())
+            throw new IllegalArgumentException("CPF do jogador é obrigatório");
+        if(jogador.getIdade() <= 0)
+            throw new IllegalArgumentException("Idade do jogador é obrigatório");
+        if(jogador.getNacionalidade() == null || jogador.getNacionalidade().isBlank())
+            throw new IllegalArgumentException("Nacionalidade do jogador é obrigatório");
+        if(jogador.getPosicao() == null || jogador.getPosicao().isBlank())
+            throw new IllegalArgumentException("Nacionalidade do jogador é obrigatório");
+
+        return jogadorRepository.save(jogador);
     }
 }

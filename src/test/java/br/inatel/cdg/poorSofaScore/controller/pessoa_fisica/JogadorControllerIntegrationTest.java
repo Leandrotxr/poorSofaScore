@@ -3,6 +3,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_fisica;
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica.JogadorService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +66,17 @@ public class JogadorControllerIntegrationTest {
     // ---------- TESTE POST /jogadores/adicionarJogador ----------
     @Test
     void deveAdicionarJogador() throws Exception {
-        JogadorDTO dto = JogadorDTO.builder().nome("Messi").build();
+        Jogador dto = Jogador.builder()
+                .nome("Messi")
+                .cpf("123456789")
+                .idade(38)
+                .nacionalidade("argentino")
+                .posicao("atacante")
+                .build();
 
         mockMvc.perform(post("/jogadores/adicionarJogador")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }
