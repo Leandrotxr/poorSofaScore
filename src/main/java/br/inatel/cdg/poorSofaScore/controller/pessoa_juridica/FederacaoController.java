@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/federacao")
+@RequestMapping("/federacoes")
 public class FederacaoController {
 
     @Autowired

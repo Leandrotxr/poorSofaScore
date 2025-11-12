@@ -29,47 +29,47 @@ class EquipeControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /equipe ----------
+    // ---------- TESTE GET /equipes ----------
     @Test
     void deveListarEquipes() throws Exception {
         EquipeDTO dto = EquipeDTO.builder().nome("Flamengo").sede("RJ").build();
         when(equipeService.listarEquipes()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/equipe"))
+        mockMvc.perform(get("/equipes"))
                 .andExpect(status().isOk()) // HTTP 200
                 .andExpect(jsonPath("$[0].nome").value("Flamengo"))
                 .andExpect(jsonPath("$[0].sede").value("RJ"));
     }
 
-    // ---------- TESTE GET /equipe/nomes ----------
+    // ---------- TESTE GET /equipes/nomes ----------
     @Test
     void deveListarNomesDasEquipes() throws Exception {
         EquipeNomeDTO nomeDTO = new EquipeNomeDTO("Corinthians");
         when(equipeService.listarNomes()).thenReturn(List.of(nomeDTO));
 
-        mockMvc.perform(get("/equipe/nomes"))
+        mockMvc.perform(get("/equipes/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Corinthians"));
     }
 
-    // ---------- TESTE GET /equipe/{nome} ----------
+    // ---------- TESTE GET /equipes/{nome} ----------
     @Test
     void deveBuscarEquipePorNome() throws Exception {
         EquipeDTO dto = EquipeDTO.builder().nome("Flamengo").sede("RJ").build();
         when(equipeService.buscarEquipePorNome("Flamengo")).thenReturn(dto);
 
-        mockMvc.perform(get("/equipe/Flamengo"))
+        mockMvc.perform(get("/equipes/Flamengo"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Flamengo"))
                 .andExpect(jsonPath("$.sede").value("RJ"));
     }
 
-    // ---------- TESTE POST /equipe/adicionarEquipe ----------
+    // ---------- TESTE POST /equipes/adicionarEquipe ----------
     @Test
     void deveAdicionarEquipe() throws Exception {
         EquipeDTO dto = EquipeDTO.builder().nome("Flamengo").sede("RJ").build();
 
-        mockMvc.perform(post("/equipe/adicionarEquipe")
+        mockMvc.perform(post("/equipes/adicionarEquipe")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

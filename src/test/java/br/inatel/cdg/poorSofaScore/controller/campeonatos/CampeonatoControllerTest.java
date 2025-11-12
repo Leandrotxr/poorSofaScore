@@ -28,7 +28,7 @@ public class CampeonatoControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /campeonato
+    // Teste para GET /campeonatos
     @Test
     void deveListarCampeonatos() {
         CampeonatoDTO campeonatoDTO = CampeonatoDTO.builder().nome("Libertadores").build();
@@ -41,7 +41,7 @@ public class CampeonatoControllerTest {
         verify(campeonatoService, times(1)).listarCampeonatos();
     }
 
-    // Teste para GET /campeonato/nomes
+    // Teste para GET /campeonatos/nomes
     @Test
     void deveListarNomesDosCampeonato() {
         CampeonatoNomeDTO campeonatoNomeDTO = new CampeonatoNomeDTO("Libertadores");
@@ -53,7 +53,7 @@ public class CampeonatoControllerTest {
         verify(campeonatoService, times(1)).listarNome();
     }
 
-    // Teste para GET /campeonato/{nome}
+    // Teste para GET /campeonatos/{nome}
     @Test
     void deveBuscarCampeonatoPorNome() {
         CampeonatoDTO campeonatoDTO = CampeonatoDTO.builder().nome("Libertadores").build();
@@ -65,7 +65,7 @@ public class CampeonatoControllerTest {
         verify(campeonatoService, times(1)).buscarCampeonatoPorNome("Libertadores");
     }
 
-    // Teste para POST /campeonato/adicionarCampeonato
+    // Teste para POST /campeonatos/adicionarCampeonato
     @Test
     void deveAdicionarCampeonato() {
         Campeonato campeonato = new Campeonato();

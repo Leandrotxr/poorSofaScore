@@ -29,45 +29,45 @@ public class JogadorControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // ---------- TESTE GET /jogador ----------
+    // ---------- TESTE GET /jogadores ----------
     @Test
     void deveListarJogador() throws Exception {
         JogadorDTO dto = JogadorDTO.builder().nome("Messi").build();
         when(jogadorService.listarJogadores()).thenReturn(List.of(dto));
 
-        mockMvc.perform(get("/jogador"))
+        mockMvc.perform(get("/jogadores"))
                 .andExpect(status().isOk()) // HTTP 200
                 .andExpect(jsonPath("$[0].nome").value("Messi"));
     }
 
-    // ---------- TESTE GET /jogador/nomes ----------
+    // ---------- TESTE GET /jogadores/nomes ----------
     @Test
     void deveListarNomesDosJogadores() throws Exception {
         JogadorNomeDTO jogadorNomeDTO = new JogadorNomeDTO("Messi");
         when(jogadorService.listarNome()).thenReturn(List.of(jogadorNomeDTO));
 
-        mockMvc.perform(get("/jogador/nomes"))
+        mockMvc.perform(get("/jogadores/nomes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].nome").value("Messi"));
     }
 
-    // ---------- TESTE GET /jogador/{nome} ----------
+    // ---------- TESTE GET /jogadores/{nome} ----------
     @Test
     void deveBuscarJogadorPorNome() throws Exception {
         JogadorDTO dto = JogadorDTO.builder().nome("Messi").build();
         when(jogadorService.buscarJogadorPorNome("Messi")).thenReturn(dto);
 
-        mockMvc.perform(get("/jogador/Messi"))
+        mockMvc.perform(get("/jogadores/Messi"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nome").value("Messi"));
     }
 
-    // ---------- TESTE POST /jogador/adicionarJogador ----------
+    // ---------- TESTE POST /jogadores/adicionarJogador ----------
     @Test
     void deveAdicionarJogador() throws Exception {
         JogadorDTO dto = JogadorDTO.builder().nome("Messi").build();
 
-        mockMvc.perform(post("/jogador/adicionarJogador")
+        mockMvc.perform(post("/jogadores/adicionarJogador")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());

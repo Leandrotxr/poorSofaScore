@@ -28,7 +28,7 @@ public class JogadorControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /jogador
+    // Teste para GET /jogadores
     @Test
     void deveListarJogador() {
         JogadorDTO jogadorDTO = JogadorDTO.builder().nome("Kaio Jorge").build();
@@ -41,7 +41,7 @@ public class JogadorControllerTest {
         verify(jogadorService, times(1)).listarJogadores();
     }
 
-    // Teste para GET /jogador/nomes
+    // Teste para GET /jogadores/nomes
     @Test
     void deveListarNomesDosJogadores() {
         JogadorNomeDTO jogadorNomeDTO = new JogadorNomeDTO("Kaio Jorge");
@@ -53,7 +53,7 @@ public class JogadorControllerTest {
         verify(jogadorService, times(1)).listarNome();
     }
 
-    // Teste para GET /jogador/{nome}
+    // Teste para GET /jogadores/{nome}
     @Test
     void deveBuscarJogadorPorNome() {
         JogadorDTO jogadorDTO = JogadorDTO.builder().nome("Kaio Jorge").build();
@@ -65,7 +65,7 @@ public class JogadorControllerTest {
         verify(jogadorService, times(1)).buscarJogadorPorNome("Kaio Jorge");
     }
 
-    // Teste para POST /jogador/adicionarJogador
+    // Teste para POST /jogadores/adicionarJogador
     @Test
     void deveAdicionarArbitro() {
         Jogador jogador = new Jogador();

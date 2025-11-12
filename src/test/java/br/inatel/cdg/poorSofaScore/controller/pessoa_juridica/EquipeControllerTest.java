@@ -28,7 +28,7 @@ class EquipeControllerTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    // Teste para GET /equipe
+    // Teste para GET /equipes
     @Test
     void deveListarEquipes() {
         EquipeDTO equipeDTO = EquipeDTO.builder().nome("cruzeiro").build();
@@ -41,7 +41,7 @@ class EquipeControllerTest {
         verify(equipeService, times(1)).listarEquipes();
     }
 
-    // Teste para GET /equipe/nomes
+    // Teste para GET /equipes/nomes
     @Test
     void deveListarNomesDasEquipes() {
         EquipeNomeDTO equipeDTO = new EquipeNomeDTO("Corinthians");
@@ -53,7 +53,7 @@ class EquipeControllerTest {
         verify(equipeService, times(1)).listarNomes();
     }
 
-    // Teste para GET /equipe/{nome}
+    // Teste para GET /equipes/{nome}
     @Test
     void deveBuscarEquipePorNome() {
         EquipeDTO equipeDTO = EquipeDTO.builder().nome("cruzeiro").build();
@@ -65,7 +65,7 @@ class EquipeControllerTest {
         verify(equipeService, times(1)).buscarEquipePorNome("cruzeiro");
     }
 
-    // Teste para POST /equipe/adicionarEquipe
+    // Teste para POST /equipes/adicionarEquipe
     @Test
     void deveAdicionarEquipe() {
         Equipe equipe = new Equipe();
