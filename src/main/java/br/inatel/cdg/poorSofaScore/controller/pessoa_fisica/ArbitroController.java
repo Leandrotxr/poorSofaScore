@@ -5,6 +5,9 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +35,8 @@ public class ArbitroController {
     }
 
     @PostMapping("/adicionarArbitro")
-    public void adicionarArbitro(@RequestBody Arbitro arbitro) {
-        arbitroService.adicionarArbitro(arbitro);
+    public ResponseEntity<Arbitro> adicionarArbitro(@Validated @RequestBody Arbitro arbitro) {
+        Arbitro novoArbitro = arbitroService.adicionarArbitro(arbitro);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoArbitro);
     }
 }
