@@ -34,6 +34,11 @@ public class CampeonatoServiceTest {
 
     @BeforeEach
     void setUp() {
+        campeonato = Campeonato.builder()
+                .nome("Premier League")
+                .local("Inglaterra")
+                .premio(200000000)
+                .build();
         federacaoMock = Mockito.mock(Federacao.class);
         listaEquipeMock = Mockito.mock(List.class);
     }
@@ -45,7 +50,7 @@ public class CampeonatoServiceTest {
     }
 
     @Test
-    void deveAdicionarNovoCampeonatoNaFederacao() {
+    void deveAdicionarCampeonatoNaFederacao() {
         when(federacaoMock.getLista_campeonato()).thenReturn(listaCampeonatoMock);
         campeonato.setFederacao(federacaoMock);
         assertEquals(federacaoMock.getLista_campeonato(), listaCampeonatoMock);
@@ -62,7 +67,7 @@ public class CampeonatoServiceTest {
 
         Campeonato novoCampeonato = Campeonato.builder().nome("Copa Sul").local("BR").premio(100).build();
 
-        campeonatoService.adicionarNovoCampeonato(novoCampeonato);
+        campeonatoService.adicionarCampeonato(novoCampeonato);
 
         verify(campeonatoRepository, times(1)).save(novoCampeonato);
     }
