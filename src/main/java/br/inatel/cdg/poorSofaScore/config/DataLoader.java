@@ -417,33 +417,33 @@ public class DataLoader implements CommandLineRunner {
             federacaoService.adcionarCampeonato(conmebol, sulamericana);
 
             // Turquia
-            campeonatoService.adicionarCampeonato(fener, superLig);
-            campeonatoService.adicionarCampeonato(fener, turkiyeKupasi);
+            campeonatoService.adicionarNovoCampeonato(fener, superLig);
+            campeonatoService.adicionarNovoCampeonato(fener, turkiyeKupasi);
 
             // Inglaterra
-            campeonatoService.adicionarCampeonato(city, premier);
-            campeonatoService.adicionarCampeonato(city, faCup);
-            campeonatoService.adicionarCampeonato(city, carabao);
+            campeonatoService.adicionarNovoCampeonato(city, premier);
+            campeonatoService.adicionarNovoCampeonato(city, faCup);
+            campeonatoService.adicionarNovoCampeonato(city, carabao);
 
             // Espanha
-            campeonatoService.adicionarCampeonato(madrid, laLiga);
-            campeonatoService.adicionarCampeonato(madrid, copaDelRey);
+            campeonatoService.adicionarNovoCampeonato(madrid, laLiga);
+            campeonatoService.adicionarNovoCampeonato(madrid, copaDelRey);
 
             // Alemanha
-            campeonatoService.adicionarCampeonato(lever, bundesliga);
-            campeonatoService.adicionarCampeonato(lever, dfbPokal);
+            campeonatoService.adicionarNovoCampeonato(lever, bundesliga);
+            campeonatoService.adicionarNovoCampeonato(lever, dfbPokal);
 
             // Brasil
-            campeonatoService.adicionarCampeonato(fla, brasileirao);
-            campeonatoService.adicionarCampeonato(fla, copaDoBrasil);
+            campeonatoService.adicionarNovoCampeonato(fla, brasileirao);
+            campeonatoService.adicionarNovoCampeonato(fla, copaDoBrasil);
 
             // 🌍 Competições internacionais
-            campeonatoService.adicionarCampeonato(fener, europa);
-            campeonatoService.adicionarCampeonato(city, champions);
-            campeonatoService.adicionarCampeonato(madrid, champions);
-            campeonatoService.adicionarCampeonato(lever, europa);
-            campeonatoService.adicionarCampeonato(fla, libertadores);
-            campeonatoService.adicionarCampeonato(fla, mundial);
+            campeonatoService.adicionarNovoCampeonato(fener, europa);
+            campeonatoService.adicionarNovoCampeonato(city, champions);
+            campeonatoService.adicionarNovoCampeonato(madrid, champions);
+            campeonatoService.adicionarNovoCampeonato(lever, europa);
+            campeonatoService.adicionarNovoCampeonato(fla, libertadores);
+            campeonatoService.adicionarNovoCampeonato(fla, mundial);
 
             // =====================
             // 💾 SALVAR NO BANCO

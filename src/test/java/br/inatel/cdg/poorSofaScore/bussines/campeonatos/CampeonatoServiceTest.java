@@ -51,7 +51,7 @@ public class CampeonatoServiceTest {
     }
 
     @Test
-    void deveAdicionarCampeonatoNaFederacao() {
+    void deveAdicionarNovoCampeonatoNaFederacao() {
         when(federacaoMock.getLista_campeonato()).thenReturn(listaCampeonatoMock);
         campeonato.setFederacao(federacaoMock);
         assertEquals(federacaoMock.getLista_campeonato(), listaCampeonatoMock);
@@ -68,7 +68,7 @@ public class CampeonatoServiceTest {
 
         Campeonato novoCampeonato = Campeonato.builder().nome("Copa Sul").local("BR").premio(100).build();
 
-        campeonatoService.adicionarCampeonato(novoCampeonato);
+        campeonatoService.adicionarNovoCampeonato(novoCampeonato);
 
         verify(campeonatoRepository, times(1)).save(novoCampeonato);
     }

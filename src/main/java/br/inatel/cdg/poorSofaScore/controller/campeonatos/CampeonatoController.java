@@ -36,7 +36,7 @@ public class CampeonatoController {
 
     @PostMapping("/adicionarCampeonato")
     public ResponseEntity<Campeonato> adicionarCampeonato(@Validated @RequestBody Campeonato campeonato) {
-        Campeonato novoCampeonato = campeonatoService.adicionarCampeonato(campeonato);
+        Campeonato novoCampeonato = campeonatoService.adicionarNovoCampeonato(campeonato);
         return ResponseEntity.status(HttpStatus.CREATED).body(novoCampeonato);
     }
 }

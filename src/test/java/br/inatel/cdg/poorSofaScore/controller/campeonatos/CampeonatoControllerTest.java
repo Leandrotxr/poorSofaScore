@@ -72,6 +72,6 @@ public class CampeonatoControllerTest {
 
         campeonatoController.adicionarCampeonato(campeonato);
 
-        verify(campeonatoService, times(1)).adicionarCampeonato(campeonato);
+        verify(campeonatoService, times(1)).adicionarNovoCampeonato(campeonato);
     }
 }

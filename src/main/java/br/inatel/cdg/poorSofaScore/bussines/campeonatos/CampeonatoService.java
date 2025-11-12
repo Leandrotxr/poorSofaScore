@@ -7,7 +7,6 @@ import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.campeonatos.CampeonatoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +21,7 @@ public class CampeonatoService {
         this.campeonatoRepository = campeonatoRepository;
     }
 
-    public void adicionarCampeonato(Equipe equipe, Campeonato campeonato) {
+    public void adicionarNovoCampeonato(Equipe equipe, Campeonato campeonato) {
         equipe.getLista_campeonatos().add(campeonato);
         campeonato.getEquipes().add(equipe);
     }
@@ -64,7 +63,7 @@ public class CampeonatoService {
                 .build();
     }
 
-    public Campeonato adicionarCampeonato(Campeonato campeonato) {
+    public Campeonato adicionarNovoCampeonato(Campeonato campeonato) {
         if(campeonato.getNome() == null || campeonato.getNome().isBlank()) {
             throw new IllegalArgumentException("Nome do campeonato é obrigatório");
         }
