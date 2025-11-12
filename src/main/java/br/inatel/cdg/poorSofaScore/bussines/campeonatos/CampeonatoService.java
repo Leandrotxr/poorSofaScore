@@ -21,7 +21,7 @@ public class CampeonatoService {
         this.campeonatoRepository = campeonatoRepository;
     }
 
-    public void adicionarNovoCampeonato(Equipe equipe, Campeonato campeonato) {
+    public void adicionarCampeonato(Equipe equipe, Campeonato campeonato) {
         equipe.getLista_campeonatos().add(campeonato);
         campeonato.getEquipes().add(equipe);
     }
@@ -63,7 +63,7 @@ public class CampeonatoService {
                 .build();
     }
 
-    public Campeonato adicionarNovoCampeonato(Campeonato campeonato) {
+    public Campeonato adicionarCampeonato(Campeonato campeonato) {
         if(campeonato.getNome() == null || campeonato.getNome().isBlank()) {
             throw new IllegalArgumentException("Nome do campeonato é obrigatório");
         }
