@@ -169,6 +169,7 @@ public class EquipeServiceTest {
     void deveSalvarEquipeNoRepositorio() {
         Equipe equipe = Equipe.builder()
                 .nome("Barcelona")
+                .cnpj("1234")
                 .fundacao(1899)
                 .sede("Barcelona")
                 .build();
@@ -184,5 +185,70 @@ public class EquipeServiceTest {
         Equipe capturada = captor.getValue();
 
         assertEquals("Barcelona", capturada.getNome(), "O nome da equipe deve ser 'Barcelona'");
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNomeForNuloOuVazio() {
+        Equipe equipe = Equipe.builder()
+                .cnpj("12345678000199")
+                .fundacao(1899)
+                .sede("Barcelona")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.adicionarEquipe(equipe)
+        );
+
+        assertEquals("Nome da equipe é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCnpjForNuloOuVazio() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .fundacao(1899)
+                .sede("Barcelona")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.adicionarEquipe(equipe)
+        );
+
+        assertEquals("CNPJ da equipe é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoFundacaoForInvalida() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .cnpj("12345678000199")
+                .fundacao(0)
+                .sede("Barcelona")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.adicionarEquipe(equipe)
+        );
+
+        assertEquals("Fundação da equipe é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoSedeForNulaOuVazia() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .cnpj("12345678000199")
+                .fundacao(1899)
+                .build();
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.adicionarEquipe(equipe)
+        );
+
+        assertEquals("Sede da equipe é obrigatório", ex.getMessage());
     }
 }
