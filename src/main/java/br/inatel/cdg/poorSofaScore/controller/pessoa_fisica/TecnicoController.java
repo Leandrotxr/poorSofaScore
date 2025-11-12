@@ -5,6 +5,9 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +35,8 @@ public class TecnicoController {
     }
 
     @PostMapping("/adicionarTecnico")
-    public void adicionarTecnico(@RequestBody Tecnico tecnico) {
-        tecnicoService.adicionarTecnico(tecnico);
+    public ResponseEntity<Tecnico> adicionarTecnico(@Validated @RequestBody Tecnico tecnico) {
+        Tecnico novoTecnico = tecnicoService.adicionarTecnico(tecnico);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoTecnico);
     }
 }
