@@ -9,6 +9,8 @@ import br.inatel.cdg.poorSofaScore.infrastructure.repository.campeonatos.Campeon
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +35,7 @@ public class CampeonatoServiceTest {
                 .build();
 
         equipe = Equipe.builder()
+                .lista_campeonatos(new ArrayList<>())
                 .nome("Arsenal")
                 .build();
 
@@ -41,7 +44,7 @@ public class CampeonatoServiceTest {
                 .local("Inglaterra")
                 .premio(200000000)
                 .federacao(federacao)
-                .equipes(List.of(equipe))
+                .equipes(new ArrayList<>())
                 .build();
     }
 
@@ -144,6 +147,7 @@ public class CampeonatoServiceTest {
 
     @Test
     void deveListarCampeonatosComEquipesConvertidasParaDTO() {
+        campeonato.getEquipes().add(equipe);
         assertEquals(1, getDTO().getEquipes().size());
     }
 
