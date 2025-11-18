@@ -2,24 +2,22 @@ package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.JogadorNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.JogadorRepository;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class JogadorServiceTest {
 
     @Mock
@@ -28,86 +26,190 @@ public class JogadorServiceTest {
     @InjectMocks
     private JogadorService jogadorService;
 
-    @Test
-    void deveSalvarNovoJogador() {
+    private Jogador jogador;
+    private Equipe equipe;
 
-        Jogador novoJogador = Jogador.builder()
-                .nome("Neymar Jr")
-                .idade(31)
-                .nacionalidade("Brasileiro")
-                .posicao("Atacante")
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+
+        equipe = Equipe.builder()
+                .nome("Barcelona")
                 .build();
 
-        jogadorService.adicionarJogador(novoJogador);
-
-        verify(jogadorRepository, times(1)).save(novoJogador);
-    }
-
-    @Test
-    void deveRetornarListaDeJogadoresDTO() {
-
-        Jogador jogador1 = Jogador.builder()
+        jogador = Jogador.builder()
                 .nome("Messi")
-                .idade(36)
-                .nacionalidade("Argentino")
+                .idade(35)
+                .cpf("999")
+                .nacionalidade("Argentina")
                 .posicao("Atacante")
+                .equipe(equipe)
                 .build();
+    }
 
-        Jogador jogador2 = Jogador.builder()
-                .nome("Casemiro")
-                .idade(32)
-                .nacionalidade("Brasileiro")
-                .posicao("Volante")
-                .build();
+    private List<JogadorDTO> executarListagemBasica() {
+        when(jogadorRepository.findAll()).thenReturn(List.of(jogador));
+        return jogadorService.listarJogadores();
+    }
 
-        List<Jogador> lista = new ArrayList<>();
-        lista.add(jogador1);
-        lista.add(jogador2);
+    private JogadorDTO jogadorDTO() {
+        List<JogadorDTO> resultado = executarListagemBasica();
+        assertEquals(1, resultado.size());
+        return resultado.get(0);
+    }
 
-        when(jogadorRepository.findAll()).thenReturn(lista);
+    // ---------------------
+    // TESTES DE LISTAGEM
+    // ---------------------
 
-        List<JogadorDTO> resultado = jogadorService.listarJogadores();
-
-        verify(jogadorRepository, times(1)).findAll();
-        assertEquals(2, resultado.size());
-        assertEquals("Messi", resultado.get(0).getNome());
-        assertEquals("Casemiro", resultado.get(1).getNome());
+    @Test
+    void deveListarJogadoresComNomeConvertidoParaDTO() {
+        assertEquals("Messi", jogadorDTO().getNome());
     }
 
     @Test
-    void deveRetornarJogadorDTOQuandoBuscarPorNome() {
-
-        String nomeBusca = "Neymar";
-
-        Jogador jogador = Jogador.builder()
-                .nome(nomeBusca)
-                .idade(31)
-                .nacionalidade("Brasileiro")
-                .posicao("Atacante")
-                .build();
-
-        when(jogadorRepository.findByNome(nomeBusca)).thenReturn(Optional.of(jogador));
-
-        JogadorDTO resultado = jogadorService.buscarJogadorPorNome(nomeBusca);
-
-        verify(jogadorRepository, times(1)).findByNome(nomeBusca);
-        assertNotNull(resultado);
-        assertEquals(nomeBusca, resultado.getNome());
+    void deveListarJogadoresComIdadeConvertidaParaDTO() {
+        assertEquals(35, jogadorDTO().getIdade());
     }
 
     @Test
-    void deveLancarExcecaoQuandoJogadorNaoExistir() {
+    void deveListarJogadoresComNacionalidadeConvertidaParaDTO() {
+        assertEquals("Argentina", jogadorDTO().getNacionalidade());
+    }
 
-        String nomeInexistente = "Jogador X";
+    @Test
+    void deveListarJogadoresComPosicaoConvertidaParaDTO() {
+        assertEquals("Atacante", jogadorDTO().getPosicao());
+    }
 
-        when(jogadorRepository.findByNome(nomeInexistente))
-                .thenReturn(Optional.empty());
+    @Test
+    void deveListarJogadoresComEquipeConvertidaParaDTO() {
+        assertEquals("Barcelona", jogadorDTO().getEquipe());
+    }
 
-        RuntimeException excecao = assertThrows(RuntimeException.class, () -> {
-            jogadorService.buscarJogadorPorNome(nomeInexistente);
-        });
+    @Test
+    void deveListarSomenteNomesDosJogadores() {
+        when(jogadorRepository.findAll()).thenReturn(List.of(jogador));
 
-        assertTrue(excecao.getMessage().contains("Jogador não encontrada: " + nomeInexistente));
-        verify(jogadorRepository, times(1)).findByNome(nomeInexistente);
+        List<JogadorNomeDTO> nomes = jogadorService.listarNome();
+
+        assertEquals(1, nomes.size());
+        assertEquals("Messi", nomes.get(0).getNome());
+    }
+
+    // ---------------------
+    // TESTES DE BUSCA POR NOME
+    // ---------------------
+
+    @Test
+    void deveBuscarJogadorPorNomeComSucesso() {
+        when(jogadorRepository.findByNome("Messi")).thenReturn(Optional.of(jogador));
+
+        JogadorDTO dto = jogadorService.buscarJogadorPorNome("Messi");
+
+        assertEquals("Messi", dto.getNome());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoJogadorNaoEncontrado() {
+        when(jogadorRepository.findByNome("Inexistente")).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> jogadorService.buscarJogadorPorNome("Inexistente"));
+
+        assertEquals("Jogador não encontrada: Inexistente", ex.getMessage());
+    }
+
+    // ---------------------
+    // TESTES DE ADIÇÃO
+    // ---------------------
+
+    @Test
+    void deveSalvarJogadorNoRepositorio() {
+        when(jogadorRepository.save(any(Jogador.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        jogadorService.adicionarJogador(jogador);
+
+        ArgumentCaptor<Jogador> captor = ArgumentCaptor.forClass(Jogador.class);
+        verify(jogadorRepository).save(captor.capture());
+
+        assertEquals("Messi", captor.getValue().getNome());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNomeForInvalido() {
+        Jogador j = Jogador.builder()
+                .cpf("123")
+                .idade(20)
+                .nacionalidade("Brasil")
+                .posicao("Zagueiro")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> jogadorService.adicionarJogador(j));
+
+        assertEquals("Nome do jogador é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCpfForInvalido() {
+        Jogador j = Jogador.builder()
+                .nome("Teste")
+                .idade(20)
+                .nacionalidade("Brasil")
+                .posicao("Zagueiro")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> jogadorService.adicionarJogador(j));
+
+        assertEquals("CPF do jogador é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoIdadeForInvalida() {
+        Jogador j = Jogador.builder()
+                .nome("Teste")
+                .cpf("123")
+                .idade(0)
+                .nacionalidade("Brasil")
+                .posicao("Zagueiro")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> jogadorService.adicionarJogador(j));
+
+        assertEquals("Idade do jogador é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNacionalidadeForInvalida() {
+        Jogador j = Jogador.builder()
+                .nome("Teste")
+                .cpf("123")
+                .idade(20)
+                .posicao("Zagueiro")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> jogadorService.adicionarJogador(j));
+
+        assertEquals("Nacionalidade do jogador é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoPosicaoForInvalida() {
+        Jogador j = Jogador.builder()
+                .nome("Teste")
+                .cpf("123")
+                .idade(20)
+                .nacionalidade("Brasil")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> jogadorService.adicionarJogador(j));
+
+        assertEquals("Nacionalidade do jogador é obrigatório", ex.getMessage());
     }
 }

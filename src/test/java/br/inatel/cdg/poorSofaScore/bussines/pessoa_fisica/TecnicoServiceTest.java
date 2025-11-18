@@ -2,15 +2,15 @@ package br.inatel.cdg.poorSofaScore.bussines.pessoa_fisica;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.TecnicoNomeDTO;
-import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.TecnicoRepository;
-
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.MockitoAnnotations;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +18,6 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class TecnicoServiceTest {
 
     @Mock
@@ -27,96 +26,166 @@ public class TecnicoServiceTest {
     @InjectMocks
     private TecnicoService tecnicoService;
 
-    @Test
-    void deveAdicionarTecnico() {
-        Tecnico tecnico = Tecnico.builder()
-                .nome("Carlo Ancelotti")
-                .idade(64)
-                .nacionalidade("Italiana")
-                .build();
+    private Tecnico tecnico;
+    private Equipe equipe;
 
-        tecnicoService.adicionarTecnico(tecnico);
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
 
-        verify(tecnicoRepository, times(1)).save(tecnico);
-    }
-
-    @Test
-    void deveListarTecnicosRetornandoTecnicoDTO() {
-
-        Equipe equipe = Equipe.builder()
+        equipe = Equipe.builder()
                 .nome("Real Madrid")
                 .build();
 
-        Tecnico tecnico = Tecnico.builder()
+        tecnico = Tecnico.builder()
                 .nome("Ancelotti")
-                .idade(64)
-                .nacionalidade("Italiana")
+                .idade(60)
+                .cpf("123")
+                .nacionalidade("Itália")
                 .equipe(equipe)
                 .build();
+    }
 
+    private List<TecnicoDTO> executarListagemBasica() {
         when(tecnicoRepository.findAll()).thenReturn(List.of(tecnico));
+        return tecnicoService.listarTecnicos();
+    }
 
-        List<TecnicoDTO> resultado = tecnicoService.listarTecnicos();
-
-        verify(tecnicoRepository, times(1)).findAll();
-
+    private TecnicoDTO tecnicoDTO() {
+        List<TecnicoDTO> resultado = executarListagemBasica();
         assertEquals(1, resultado.size());
-        assertEquals("Ancelotti", resultado.get(0).getNome());
-        assertEquals("Real Madrid", resultado.get(0).getEquipe());
+        return resultado.get(0);
+    }
+
+    // ---------------------
+    // TESTES DE LISTAGEM
+    // ---------------------
+
+    @Test
+    void deveListarTecnicosComNomeConvertidoParaDTO() {
+        assertEquals("Ancelotti", tecnicoDTO().getNome());
+    }
+
+    @Test
+    void deveListarTecnicosComIdadeConvertidaParaDTO() {
+        assertEquals(60, tecnicoDTO().getIdade());
+    }
+
+    @Test
+    void deveListarTecnicosComNacionalidadeConvertidaParaDTO() {
+        assertEquals("Itália", tecnicoDTO().getNacionalidade());
+    }
+
+    @Test
+    void deveListarTecnicosComEquipeConvertidaParaDTO() {
+        assertEquals("Real Madrid", tecnicoDTO().getEquipe());
     }
 
     @Test
     void deveListarSomenteNomesDosTecnicos() {
-
-        Tecnico tecnico = Tecnico.builder()
-                .nome("Dorival Jr")
-                .idade(61)
-                .nacionalidade("Brasileira")
-                .build();
-
         when(tecnicoRepository.findAll()).thenReturn(List.of(tecnico));
 
-        List<TecnicoNomeDTO> resultado = tecnicoService.listarNome();
+        List<TecnicoNomeDTO> nomes = tecnicoService.listarNome();
 
-        verify(tecnicoRepository, times(1)).findAll();
-        assertEquals(1, resultado.size());
-        assertEquals("Dorival Jr", resultado.get(0).getNome());
+        assertEquals(1, nomes.size());
+        assertEquals("Ancelotti", nomes.get(0).getNome());
     }
 
+    // ---------------------
+    // TESTES DE BUSCA POR NOME
+    // ---------------------
+
     @Test
-    void deveBuscarTecnicoPorNome() {
+    void deveBuscarTecnicoPorNomeComSucesso() {
+        when(tecnicoRepository.findByNome("Ancelotti")).thenReturn(Optional.of(tecnico));
 
-        Tecnico tecnico = Tecnico.builder()
-                .nome("Tite")
-                .idade(62)
-                .nacionalidade("Brasileira")
-                .build();
+        TecnicoDTO dto = tecnicoService.buscarTecnicoPorNome("Ancelotti");
 
-        when(tecnicoRepository.findByNome("Tite")).thenReturn(Optional.of(tecnico));
-
-        TecnicoDTO resultado = tecnicoService.buscarTecnicoPorNome("Tite");
-
-        verify(tecnicoRepository, times(1)).findByNome("Tite");
-
-        assertNotNull(resultado);
-        assertEquals("Tite", resultado.getNome());
-        assertEquals(62, resultado.getIdade());
+        assertEquals("Ancelotti", dto.getNome());
     }
 
     @Test
     void deveLancarExcecaoQuandoTecnicoNaoEncontrado() {
+        when(tecnicoRepository.findByNome("Inexistente")).thenReturn(Optional.empty());
 
-        String nomeInexistente = "Zidane";
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> tecnicoService.buscarTecnicoPorNome("Inexistente"));
 
-        when(tecnicoRepository.findByNome(nomeInexistente)).thenReturn(Optional.empty());
+        assertEquals("Tecnico não encontrada: Inexistente", ex.getMessage());
+    }
 
-        RuntimeException excecao = assertThrows(
-                RuntimeException.class,
-                () -> tecnicoService.buscarTecnicoPorNome(nomeInexistente)
-        );
+    // ---------------------
+    // TESTES DE ADIÇÃO
+    // ---------------------
 
-        verify(tecnicoRepository, times(1)).findByNome(nomeInexistente);
+    @Test
+    void deveSalvarTecnicoNoRepositorio() {
 
-        assertTrue(excecao.getMessage().contains("Tecnico não encontrada: " + nomeInexistente));
+        when(tecnicoRepository.save(any(Tecnico.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        tecnicoService.adicionarTecnico(tecnico);
+
+        ArgumentCaptor<Tecnico> captor = ArgumentCaptor.forClass(Tecnico.class);
+        verify(tecnicoRepository).save(captor.capture());
+
+        assertEquals("Ancelotti", captor.getValue().getNome());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNomeForInvalido() {
+        Tecnico t = Tecnico.builder()
+                .cpf("123")
+                .idade(50)
+                .nacionalidade("Brasil")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> tecnicoService.adicionarTecnico(t));
+
+        assertEquals("Nome do tecnico é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoCpfForInvalido() {
+        Tecnico t = Tecnico.builder()
+                .nome("Teste")
+                .idade(50)
+                .nacionalidade("Brasil")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> tecnicoService.adicionarTecnico(t));
+
+        assertEquals("CPF do tecnico é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoIdadeForInvalida() {
+        Tecnico t = Tecnico.builder()
+                .nome("Teste")
+                .cpf("123")
+                .idade(0)
+                .nacionalidade("Brasil")
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> tecnicoService.adicionarTecnico(t));
+
+        assertEquals("Idade do tecnico é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNacionalidadeForInvalida() {
+        Tecnico t = Tecnico.builder()
+                .nome("Teste")
+                .cpf("123")
+                .idade(40)
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> tecnicoService.adicionarTecnico(t));
+
+        assertEquals("Nacionalidade do tecnico é obrigatório", ex.getMessage());
     }
 }
