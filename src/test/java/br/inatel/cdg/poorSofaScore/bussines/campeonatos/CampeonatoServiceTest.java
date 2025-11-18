@@ -149,6 +149,7 @@ public class CampeonatoServiceTest {
     void deveListarCampeonatosComEquipesConvertidasParaDTO() {
         campeonato.getEquipes().add(equipe);
         assertEquals(1, getDTO().getEquipes().size());
+        assertTrue(getDTO().getEquipes().contains("Arsenal"));
     }
 
     @Test
