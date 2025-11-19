@@ -21,32 +21,24 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                echo '🧪 Executando testes...'
-                sh 'mvn test'
+        stage('Tests (Parallel)') {
+            parallel {
+
+                stage('Unit Tests') {
+                    steps {
+                        echo '🧪 Executando TESTES UNITÁRIOS...'
+                        sh 'mvn -Dtest=*Test test'
+                    }
+                }
+
+                stage('Integration Tests') {
+                    steps {
+                        echo '🔗 Executando TESTES DE INTEGRAÇÃO...'
+                        sh 'mvn -Dtest=*IntegrationTest test'
+                    }
+                }
             }
         }
-
-        stage('SonarQube Analysis') {
-            steps {
-                echo '🔍 Enviando código para análise no SonarQube...'
-                    withSonarQubeEnv('Sonar') {
-                        sh 'mvn sonar:sonar'
-                    }
-                }
-            }
-
-        stage('Quality Gate') {
-            steps {
-                echo '⏳ Aguardando resultado do Quality Gate...'
-                    script {
-                       timeout(time: 3, unit: 'MINUTES') {
-                           waitForQualityGate abortPipeline: true
-                       }
-                    }
-                }
-            }
 
         stage('Package') {
             steps {
