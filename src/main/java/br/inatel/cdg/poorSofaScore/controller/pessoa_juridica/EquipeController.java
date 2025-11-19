@@ -2,6 +2,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarTecnicoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
@@ -39,5 +40,21 @@ public class EquipeController {
     public ResponseEntity<Equipe> adicionarEquipe(@Validated @RequestBody Equipe equipe) {
         Equipe novaEquipe = equipeService.adicionarEquipe(equipe);
         return ResponseEntity.status(HttpStatus.CREATED).body(novaEquipe);
+    }
+
+    @PatchMapping("/contratarTecnico")
+    public ResponseEntity<String> contratarTecnico(@RequestBody ContratarTecnicoDTO dto) {
+
+        equipeService.contratarTecnico(dto.getNomeEquipe(), dto.getNomeTecnico());
+
+        return ResponseEntity.ok("Técnico contratado pela equipe com sucesso!");
+    }
+
+    @PatchMapping("/demitirTecnico")
+    public ResponseEntity<String> demitirTecnico(@RequestBody EquipeNomeDTO dto) {
+
+        equipeService.demitirTecnico(dto);
+
+        return ResponseEntity.ok("Técnico da equipe " + dto.getNome() + " demitido");
     }
 }

@@ -9,6 +9,7 @@ import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
+import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.TecnicoRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.EquipeRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +27,7 @@ public class EquipeServiceTest {
 
     private EquipeRepository equipeRepository;
     private PatrocinadorRepository patrocinadorRepository;
+    private TecnicoRepository tecnicoRepository;
     private EquipeService equipeService;
     private Tecnico tecnico;
     private Jogador jogador;
@@ -38,7 +40,7 @@ public class EquipeServiceTest {
     void setUp() {
         equipeRepository = mock(EquipeRepository.class);
         patrocinadorRepository = mock(PatrocinadorRepository.class);
-        equipeService = new EquipeService(equipeRepository, patrocinadorRepository);
+        equipeService = new EquipeService(equipeRepository, patrocinadorRepository, tecnicoRepository);
 
          tecnico = Tecnico.builder()
                 .nome("Pep Guardiola")
