@@ -36,7 +36,7 @@ public class ArbitroService {
 
     public ArbitroDTO buscarArbitroPorNome(String nome) {
         Arbitro arbitro = arbitroRepository.findByNome(nome)
-                .orElseThrow(() -> new RuntimeException("Arbitro não encontrada: " + nome));
+                .orElseThrow(() -> new RuntimeException("Arbitro não encontrado: " + nome));
 
         return ArbitroDTO.builder()
                 .nome(arbitro.getNome())

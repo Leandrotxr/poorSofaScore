@@ -137,7 +137,7 @@ public class FederacaoServiceTest {
 
         Federacao capturada = captor.getValue();
 
-        assertEquals("CBF", capturada.getNome(), "O nome da equipe deve ser 'Barcelona'");
+        assertEquals("CBF", capturada.getNome(), "O nome da federacao deve ser 'CBF'");
     }
 
     @Test
