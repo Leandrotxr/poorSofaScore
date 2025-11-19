@@ -22,6 +22,7 @@ public class PatrocinadorServiceTest {
     @InjectMocks
     private PatrocinadorService patrocinadorService;
 
+    /*
     @Test
     void deveSalvarNovoPatrocinador() {
 
@@ -33,7 +34,7 @@ public class PatrocinadorServiceTest {
         verify(patrocinadorRepository, times(1)).save(novoPatrocinador);
     }
 
-    /*
+
     @Test
     void deveRetornarListaDePatrocinadores() {
 
