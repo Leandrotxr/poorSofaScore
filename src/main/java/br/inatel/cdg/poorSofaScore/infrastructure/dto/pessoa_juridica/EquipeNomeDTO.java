@@ -5,6 +5,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 public class EquipeNomeDTO {
     private String nome;
 }

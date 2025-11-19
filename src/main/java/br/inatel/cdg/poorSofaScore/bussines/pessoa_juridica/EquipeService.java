@@ -6,8 +6,10 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNome
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.intermediaria.Patrocinio;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
+import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.TecnicoRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.EquipeRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,12 @@ public class EquipeService {
 
     private final EquipeRepository equipeRepository;
     private final PatrocinadorRepository patrocinadorRepository;
+    private final TecnicoRepository tecnicoRepository;
 
-    public EquipeService(EquipeRepository equipeRepository, PatrocinadorRepository patrocinadorRepository) {
+    public EquipeService(EquipeRepository equipeRepository, PatrocinadorRepository patrocinadorRepository, TecnicoRepository tecnicoRepository) {
         this.equipeRepository = equipeRepository;
         this.patrocinadorRepository = patrocinadorRepository;
+        this.tecnicoRepository = tecnicoRepository;
     }
 
     @Transactional
@@ -105,6 +109,43 @@ public class EquipeService {
         if(equipe.getSede() == null || equipe.getSede().isBlank())
             throw new IllegalArgumentException("Sede da equipe é obrigatório");
 
+        return equipeRepository.save(equipe);
+    }
+
+    @Transactional
+    public void contratarTecnico(String nomeEquipe, String nomeTecnico) {
+
+        Equipe equipe = equipeRepository.findByNome(nomeEquipe)
+                .orElseThrow(() -> new RuntimeException("Equipe não encontrada: " + nomeEquipe));
+
+        Tecnico tecnico = tecnicoRepository.findByNome(nomeTecnico)
+                .orElseThrow(() -> new RuntimeException("Técnico não encontrado: " + nomeTecnico));
+
+        if (equipe.getTecnico() != null)
+            throw new IllegalArgumentException("A equipe já possui um técnico!");
+
+        if (tecnico.getEquipe() != null)
+            throw new IllegalArgumentException("O técnico já está associado a uma equipe!");
+
+        equipe.setTecnico(tecnico);
+        tecnico.setEquipe(equipe);
+
+        equipeRepository.save(equipe);
+    }
+
+    public Equipe demitirTecnico(EquipeNomeDTO nomeEquipe) {
+
+        if (nomeEquipe.getNome() == null || nomeEquipe.getNome().isBlank()) {
+            throw new IllegalArgumentException("Nome da equipe é obrigatório");
+        }
+
+        Equipe equipe = equipeRepository.findByNome(nomeEquipe.getNome())
+                .orElseThrow(() -> new IllegalArgumentException("Equipe não encontrada"));
+
+        Tecnico tecnico = equipe.getTecnico();
+
+        equipe.setTecnico(null);
+        tecnico.setEquipe(null);
         return equipeRepository.save(equipe);
     }
 }
