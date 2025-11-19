@@ -28,6 +28,26 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                echo '🔍 Enviando código para análise no SonarQube...'
+                    withSonarQubeEnv('Sonar') {
+                        sh 'mvn sonar:sonar'
+                    }
+                }
+            }
+
+        stage('Quality Gate') {
+            steps {
+                echo '⏳ Aguardando resultado do Quality Gate...'
+                    script {
+                       timeout(time: 3, unit: 'MINUTES') {
+                           waitForQualityGate abortPipeline: true
+                       }
+                    }
+                }
+            }
+
         stage('Package') {
             steps {
                 echo '📦 Gerando artefato JAR...'
