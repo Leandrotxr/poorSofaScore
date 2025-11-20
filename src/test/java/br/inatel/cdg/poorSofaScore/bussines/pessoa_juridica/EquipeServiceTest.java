@@ -9,6 +9,7 @@ import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Tecnico;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
+import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.JogadorRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.TecnicoRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.EquipeRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.PatrocinadorRepository;
@@ -28,6 +29,7 @@ public class EquipeServiceTest {
     private EquipeRepository equipeRepository;
     private PatrocinadorRepository patrocinadorRepository;
     private TecnicoRepository tecnicoRepository;
+    private JogadorRepository jogadorRepository;
     private EquipeService equipeService;
     private Tecnico tecnico;
     private Jogador jogador;
@@ -41,7 +43,8 @@ public class EquipeServiceTest {
         equipeRepository = mock(EquipeRepository.class);
         patrocinadorRepository = mock(PatrocinadorRepository.class);
         tecnicoRepository = mock(TecnicoRepository.class);
-        equipeService = new EquipeService(equipeRepository, patrocinadorRepository, tecnicoRepository);
+        jogadorRepository = mock(JogadorRepository.class);
+        equipeService = new EquipeService(equipeRepository, patrocinadorRepository, tecnicoRepository, jogadorRepository);
 
          tecnico = Tecnico.builder()
                 .nome("Pep Guardiola")
@@ -88,8 +91,7 @@ public class EquipeServiceTest {
 
     @Test
     void deveAdicionarPatrocinioEAoSalvarEquipe() {
-        //Equipe equipe = new Equipe();
-        equipe.setPatrocinios(new ArrayList<>()); //garante que lista de patrocinios está vazia
+        equipe.setPatrocinios(new ArrayList<>());
 
         Patrocinador patrocinador = new Patrocinador();
 
