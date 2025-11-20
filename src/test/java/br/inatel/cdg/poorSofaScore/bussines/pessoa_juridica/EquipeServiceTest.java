@@ -40,6 +40,7 @@ public class EquipeServiceTest {
     void setUp() {
         equipeRepository = mock(EquipeRepository.class);
         patrocinadorRepository = mock(PatrocinadorRepository.class);
+        tecnicoRepository = mock(TecnicoRepository.class);
         equipeService = new EquipeService(equipeRepository, patrocinadorRepository, tecnicoRepository);
 
          tecnico = Tecnico.builder()
@@ -253,4 +254,137 @@ public class EquipeServiceTest {
 
         assertEquals("Sede da equipe é obrigatório", ex.getMessage());
     }
+
+    @Test
+    void deveContratarTecnicoComSucesso() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .build();
+
+        Tecnico tecnico = Tecnico.builder()
+                .nome("Xavi")
+                .build();
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(tecnicoRepository.findByNome("Xavi")).thenReturn(Optional.of(tecnico));
+
+        equipeService.contratarTecnico("Barcelona", "Xavi");
+
+        assertEquals(tecnico, equipe.getTecnico());
+        assertEquals(equipe, tecnico.getEquipe());
+
+        verify(equipeRepository).save(equipe);
+    }
+
+    @Test
+    void deveLancarExcecaoSeEquipeNaoExistirAoContratarTecnico() {
+        when(equipeRepository.findByNome("teste")).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> equipeService.contratarTecnico("teste", "Xavi"));
+
+        assertTrue(ex.getMessage().contains("Equipe não encontrada"));
+    }
+
+    @Test
+    void deveLancarExcecaoSeTecnicoNaoExistirAoContratar() {
+        Equipe equipe = Equipe.builder().nome("Barcelona").build();
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(tecnicoRepository.findByNome("Xavi")).thenReturn(Optional.empty());
+
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> equipeService.contratarTecnico("Barcelona", "Xavi"));
+
+        assertTrue(ex.getMessage().contains("Técnico não encontrado"));
+    }
+
+    @Test
+    void naoDeveContratarTecnicoSeEquipeJaTiverUm() {
+        Tecnico tecnicoAtual = Tecnico.builder().nome("Xavi").build();
+
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .tecnico(tecnicoAtual)
+                .build();
+
+        Tecnico novoTecnico = Tecnico.builder().nome("Jose Mourinho").build();
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(tecnicoRepository.findByNome("Jose Mourinho")).thenReturn(Optional.of(novoTecnico));
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> equipeService.contratarTecnico("Barcelona", "Jose Mourinho"));
+
+        assertEquals("A equipe já possui um técnico!", ex.getMessage());
+    }
+
+    @Test
+    void naoDeveContratarTecnicoQueJaTemEquipe() {
+        Equipe Comtecnico = Equipe.builder().nome("Barcelona").build();
+
+        Equipe Semtecnico = Equipe.builder().nome("PSG").build();
+
+        Tecnico tecnico = Tecnico.builder()
+                .nome("Xavi")
+                .equipe(Comtecnico)
+                .build();
+
+        when(equipeRepository.findByNome("PSG")).thenReturn(Optional.of(Semtecnico));
+        when(tecnicoRepository.findByNome("Xavi")).thenReturn(Optional.of(tecnico));
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> equipeService.contratarTecnico("PSG", "Xavi"));
+
+        assertEquals("O técnico já está associado a uma equipe!", ex.getMessage());
+    }
+
+
+    @Test
+    void deveDemitirTecnicoComSucesso() {
+        Tecnico tecnico = Tecnico.builder().nome("Xavi").build();
+
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .tecnico(tecnico)
+                .build();
+
+        tecnico.setEquipe(equipe);
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(equipeRepository.save(any(Equipe.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        EquipeNomeDTO dto = new EquipeNomeDTO(equipe.getNome());
+
+        Equipe result = equipeService.demitirTecnico(dto);
+
+        assertNull(result.getTecnico());
+        assertNull(tecnico.getEquipe());
+
+        verify(equipeRepository).save(equipe);
+    }
+
+    @Test
+    void deveLancarExcecaoSeNomeDaEquipeForInvalidoAoDemitir() {
+        EquipeNomeDTO dto = new EquipeNomeDTO("");
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> equipeService.demitirTecnico(dto));
+
+        assertEquals("Nome da equipe é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoSeEquipeNaoExistirAoDemitir() {
+        EquipeNomeDTO dto = new EquipeNomeDTO("teste");
+
+        when(equipeRepository.findByNome("teste")).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> equipeService.demitirTecnico(dto));
+
+        assertEquals("Equipe não encontrada", ex.getMessage());
+    }
+
+
 }
