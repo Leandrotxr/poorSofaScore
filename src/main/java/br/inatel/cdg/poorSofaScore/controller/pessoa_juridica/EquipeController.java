@@ -2,7 +2,9 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarTecnicoDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
@@ -56,5 +58,19 @@ public class EquipeController {
         equipeService.demitirTecnico(dto);
 
         return ResponseEntity.ok("Técnico da equipe " + dto.getNome() + " demitido");
+    }
+
+    @PatchMapping("/contratarJogador")
+    public ResponseEntity<String> contratarJogador(@RequestBody ContratarJogadorDTO dto) {
+        equipeService.contratarJogador(dto.getNomeEquipe(), dto.getNomeJogador());
+        return ResponseEntity.ok(dto.getNomeJogador() + " contratado pela equipe " + dto.getNomeEquipe());
+    }
+
+    @PatchMapping("/demitirJogador")
+    public ResponseEntity<String> demitirJogador(@RequestBody DemitirJogadorDTO dto) {
+
+        equipeService.demitirJogador(dto);
+
+        return ResponseEntity.ok(dto.getNomeJogador() + " demitido da equipe " + dto.getNomeEquipe());
     }
 }
