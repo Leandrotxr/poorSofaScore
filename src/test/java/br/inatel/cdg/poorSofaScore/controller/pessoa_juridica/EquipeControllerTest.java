@@ -1,7 +1,9 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarTecnicoDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
@@ -103,6 +105,34 @@ class EquipeControllerTest {
 
         verify(equipeService, times(1))
                 .demitirTecnico(dto);
+    }
+
+    // Teste para PATCH /equipes/contratarJogador
+    @Test
+    void deveContratarJogador() {
+        ContratarJogadorDTO dto = new ContratarJogadorDTO("Flamengo", "Pedro");
+
+        ResponseEntity<String> response = equipeController.contratarJogador(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Pedro contratado pela equipe Flamengo", response.getBody());
+
+        verify(equipeService, times(1))
+                .contratarJogador("Flamengo", "Pedro");
+    }
+
+    // Teste para PATCH /equipes/demitirJogador
+    @Test
+    void deveDemitirJogador() {
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Flamengo", "Pedro");
+
+        ResponseEntity<String> response = equipeController.demitirJogador(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Pedro demitido da equipe Flamengo", response.getBody());
+
+        verify(equipeService, times(1))
+                .demitirJogador(dto);
     }
 
 }

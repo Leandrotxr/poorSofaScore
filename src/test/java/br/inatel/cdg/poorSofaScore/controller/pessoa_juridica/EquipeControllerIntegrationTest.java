@@ -1,7 +1,9 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarTecnicoDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
@@ -104,6 +106,30 @@ class EquipeControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Técnico da equipe Flamengo demitido"));
+    }
+
+    // ---------- TESTE PATCH /equipes/contratarJogador ----------
+    @Test
+    void deveContratarJogador() throws Exception {
+        ContratarJogadorDTO dto = new ContratarJogadorDTO("Flamengo", "Pedro");
+
+        mockMvc.perform(patch("/equipes/contratarJogador")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Pedro contratado pela equipe Flamengo"));
+    }
+
+    // ---------- TESTE PATCH /equipes/demitirJogador ----------
+    @Test
+    void deveDemitirJogador() throws Exception {
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Flamengo", "Pedro");
+
+        mockMvc.perform(patch("/equipes/demitirJogador")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Pedro demitido da equipe Flamengo"));
     }
 
 }
