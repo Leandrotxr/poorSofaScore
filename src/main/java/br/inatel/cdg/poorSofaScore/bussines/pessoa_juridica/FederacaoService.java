@@ -4,8 +4,10 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoD
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
+import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.ArbitroRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.FederacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,8 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class FederacaoService {
 
-    @Autowired
-    private FederacaoRepository federacaoRepository;
+    private final FederacaoRepository federacaoRepository;
+    private final ArbitroRepository arbitroRepository;
+
+    public FederacaoService(FederacaoRepository federacaoRepository, ArbitroRepository arbitroRepository) {
+        this.federacaoRepository = federacaoRepository;
+        this.arbitroRepository = arbitroRepository;
+    }
 
     public void adcionarCampeonato(Federacao federacao, Campeonato campeonato){
         federacao.getLista_campeonato().add(campeonato);
@@ -68,5 +75,26 @@ public class FederacaoService {
             throw new IllegalArgumentException("CNPJ da federacao é obrigatório");
 
         return federacaoRepository.save(federacao);
+    }
+
+    public void contratarArbitro(String nomeFederacao, String NomeArbitro) {
+
+        if (nomeFederacao == null || nomeFederacao.isBlank() || NomeArbitro == null || NomeArbitro.isBlank()) {
+            throw new IllegalArgumentException("Nome da federacao e do arbitro são obrigatórios");
+        }
+
+        Federacao federacao = federacaoRepository.findByNome(nomeFederacao)
+                .orElseThrow(() -> new IllegalArgumentException("Federacao não encontrada"));
+        Arbitro arbitro = arbitroRepository.findByNome(NomeArbitro)
+                .orElseThrow(() -> new IllegalArgumentException("Arbitro não encontrado"));
+
+        if (arbitro.getFederacao() != null) {
+            throw new IllegalArgumentException("O arbitro já pertence à federacao " +
+                    arbitro.getFederacao().getNome());
+        }
+
+        federacao.contratar(arbitro);
+        arbitro.setFederacao(federacao);
+        arbitroRepository.save(arbitro);
     }
 }

@@ -1,6 +1,7 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.FederacaoService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
@@ -37,5 +38,13 @@ public class FederacaoController {
     public ResponseEntity<Federacao> adicionarFederacao(@RequestBody Federacao federacao) {
         Federacao novafederacao = federacaoService.adicionarFederacao(federacao);
         return ResponseEntity.status(HttpStatus.CREATED).body(novafederacao);
+    }
+
+    @PatchMapping("/contratarArbitro")
+    public ResponseEntity<String> contratarArbitro(@RequestBody ArbitroDTO dto) {
+
+        federacaoService.contratarArbitro(dto.getFederacao(), dto.getNome());
+
+        return ResponseEntity.ok("Árbitro contratado pela federação com sucesso!");
     }
 }
