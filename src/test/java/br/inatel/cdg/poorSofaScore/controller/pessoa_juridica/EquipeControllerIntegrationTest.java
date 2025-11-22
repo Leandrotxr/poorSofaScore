@@ -1,6 +1,7 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarTecnicoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
@@ -80,4 +81,29 @@ class EquipeControllerIntegrationTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isCreated());
     }
+
+    // ---------- TESTE PATCH /equipes/contratarTecnico ----------
+    @Test
+    void deveContratarTecnico() throws Exception {
+        ContratarTecnicoDTO dto = new ContratarTecnicoDTO("Flamengo", "Tite");
+
+        mockMvc.perform(patch("/equipes/contratarTecnico")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Técnico contratado pela equipe com sucesso!"));
+    }
+
+    // ---------- TESTE PATCH /equipes/demitirTecnico ----------
+    @Test
+    void deveDemitirTecnico() throws Exception {
+        EquipeNomeDTO dto = new EquipeNomeDTO("Flamengo");
+
+        mockMvc.perform(patch("/equipes/demitirTecnico")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Técnico da equipe Flamengo demitido"));
+    }
+
 }
