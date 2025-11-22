@@ -1,5 +1,6 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica;
 
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.PatrocinioDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
@@ -387,6 +388,191 @@ public class EquipeServiceTest {
 
         assertEquals("Equipe não encontrada", ex.getMessage());
     }
+
+    @Test
+    void deveContratarJogadorComSucesso() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .lista_jogadores(new ArrayList<>())
+                .build();
+
+        Jogador jogador = Jogador.builder()
+                .nome("Messi")
+                .build();
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(jogadorRepository.findByNome("Messi")).thenReturn(Optional.of(jogador));
+
+        equipeService.contratarJogador("Barcelona", "Messi");
+
+        assertEquals(equipe, jogador.getEquipe());
+        assertTrue(equipe.getLista_jogadores().contains(jogador));
+
+        verify(jogadorRepository).save(jogador);
+    }
+
+    @Test
+    void deveLancarExcecaoNomesInvalidosContratarJogador() {
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.contratarJogador("", "")
+        );
+
+        assertEquals("Nome da equipe e do jogador são obrigatórios", ex.getMessage());
+    }
+    @Test
+    void deveLancarExcecaoQuandoEquipeNaoExistirContratarJogador() {
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.contratarJogador("Barcelona", "Messi")
+        );
+
+        assertEquals("Equipe não encontrada", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoJogadorNaoExistirAoContratar() {
+        Equipe equipe = Equipe.builder().nome("Barcelona").build();
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(jogadorRepository.findByNome("Messi")).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.contratarJogador("Barcelona", "Messi")
+        );
+
+        assertEquals("Jogador não encontrado", ex.getMessage());
+    }
+
+    @Test
+    void naoDeveContratarJogadorQueJaTemEquipe() {
+        Equipe equipe = Equipe.builder().nome("PSG").build();
+        Jogador jogador = Jogador.builder()
+                .nome("Neymar")
+                .equipe(equipe)
+                .build();
+
+        Equipe barcelona = Equipe.builder().nome("Barcelona").build();
+
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(barcelona));
+        when(jogadorRepository.findByNome("Neymar")).thenReturn(Optional.of(jogador));
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.contratarJogador("Barcelona", "Neymar")
+        );
+
+        assertEquals("O jogador já pertence à equipe PSG", ex.getMessage());
+    }
+
+
+    @Test
+    void deveDemitirJogadorComSucesso() {
+        Equipe equipe = Equipe.builder()
+                .nome("Barcelona")
+                .lista_jogadores(new ArrayList<>())
+                .build();
+
+        Jogador jogador = Jogador.builder()
+                .nome("Messi")
+                .equipe(equipe)
+                .build();
+
+        equipe.getLista_jogadores().add(jogador);
+
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Barcelona", "Messi");
+
+        when(jogadorRepository.findByNome("Messi")).thenReturn(Optional.of(jogador));
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(equipe));
+        when(equipeRepository.save(any(Equipe.class))).thenAnswer(inv -> inv.getArgument(0));
+
+        Equipe result = equipeService.demitirJogador(dto);
+
+        assertNull(jogador.getEquipe());
+        assertFalse(result.getLista_jogadores().contains(jogador));
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNomeEquipeInvalidoDemitirJogador() {
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("", "Messi");
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.demitirJogador(dto)
+        );
+
+        assertEquals("Nome da equipe é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoNomeJogadorInvalidoDemitirJogador() {
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Barcelona", "");
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.demitirJogador(dto)
+        );
+
+        assertEquals("Nome do jogador é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoJogadorNaoExistirDemitir() {
+        when(jogadorRepository.findByNome("Messi")).thenReturn(Optional.empty());
+
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Barcelona", "Messi");
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.demitirJogador(dto)
+        );
+
+        assertEquals("Jogador não encontrado", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecaoQuandoEquipeNaoExistirAoDemitirJogador() {
+        Jogador jogador = Jogador.builder().nome("Messi").build();
+        when(jogadorRepository.findByNome("Messi")).thenReturn(Optional.of(jogador));
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.empty());
+
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Barcelona", "Messi");
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.demitirJogador(dto)
+        );
+
+        assertEquals("Equipe não encontrada", ex.getMessage());
+    }
+
+
+    @Test
+    void naoDeveDemitirJogadorDeOutraEquipe() {
+        Equipe barcelona = Equipe.builder().nome("Barcelona").build();
+        Equipe psg = Equipe.builder().nome("PSG").build();
+
+        Jogador jogador = Jogador.builder()
+                .nome("Neymar")
+                .equipe(psg)
+                .build();
+
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Barcelona", "Neymar");
+
+        when(jogadorRepository.findByNome("Neymar")).thenReturn(Optional.of(jogador));
+        when(equipeRepository.findByNome("Barcelona")).thenReturn(Optional.of(barcelona));
+
+        IllegalArgumentException ex = assertThrows(
+                IllegalArgumentException.class,
+                () -> equipeService.demitirJogador(dto)
+        );
+
+        assertEquals("O jogador não pertence a essa equipe", ex.getMessage());
+    }
+
 
 
 }
