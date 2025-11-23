@@ -110,5 +110,4 @@ public class FederacaoControllerTest {
                 .demitirArbitro(dto);
     }
 
-
 }
