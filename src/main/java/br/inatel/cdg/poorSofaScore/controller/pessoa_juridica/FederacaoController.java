@@ -1,6 +1,8 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.FederacaoService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
@@ -46,5 +48,13 @@ public class FederacaoController {
         federacaoService.contratarArbitro(dto.getFederacao(), dto.getNome());
 
         return ResponseEntity.ok("Árbitro contratado pela federação com sucesso!");
+    }
+
+    @PatchMapping("/demitirArbitro")
+    public ResponseEntity<String> demitirArbitro(@RequestBody DemitirArbitroDTO dto) {
+
+        federacaoService.demitirArbitro(dto);
+
+        return ResponseEntity.ok(dto.getNomeArbitro() + " demitido da federação " + dto.getNomeFederacao());
     }
 }
