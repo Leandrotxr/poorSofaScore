@@ -1,5 +1,7 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica;
 
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -96,5 +99,27 @@ public class FederacaoService {
         federacao.contratar(arbitro);
         arbitro.setFederacao(federacao);
         arbitroRepository.save(arbitro);
+    }
+
+    public Federacao demitirArbitro(DemitirArbitroDTO dto) {
+
+        if (dto.getNomeArbitro() == null || dto.getNomeArbitro().isBlank()) {
+            throw new IllegalArgumentException("Nome do árbitro é obrigatório");
+        }
+        if (dto.getNomeFederacao() == null || dto.getNomeFederacao().isBlank()) {
+            throw new IllegalArgumentException("Nome do jogador é obrigatório");
+        }
+
+        Arbitro arbitro = arbitroRepository.findByNome(dto.getNomeArbitro())
+                .orElseThrow(() -> new IllegalArgumentException("Arbitro não encontrado"));
+        Federacao federacao = federacaoRepository.findByNome(dto.getNomeFederacao())
+                .orElseThrow(() -> new IllegalArgumentException("Federação não encontrada"));
+
+        if (!Objects.equals(arbitro.getFederacao().getNome(), federacao.getNome()))
+            throw new IllegalArgumentException("O arbitro não pertence a essa federação");
+
+        arbitro.setFederacao(null);
+        federacao.getLista_arbitro().remove(arbitro);
+        return federacaoRepository.save(federacao);
     }
 }
