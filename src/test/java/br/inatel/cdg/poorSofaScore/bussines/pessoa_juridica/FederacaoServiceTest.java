@@ -235,7 +235,7 @@ public class FederacaoServiceTest {
         when(federacaoRepository.findByNome("CBF")).thenReturn(Optional.of(federacao));
         when(federacaoRepository.save(any(Federacao.class))).thenReturn(federacao);
 
-        DemitirArbitroDTO dto = new DemitirArbitroDTO("CBF", "Daronco");
+        DemitirArbitroDTO dto = new DemitirArbitroDTO("Daronco", "CBF");
 
         Federacao resultado = federacaoService.demitirArbitro(dto);
 
@@ -263,7 +263,7 @@ public class FederacaoServiceTest {
         when(arbitroRepository.findByNome("Daronco")).thenReturn(Optional.of(arbitro));
         when(federacaoRepository.findByNome("CBF")).thenReturn(Optional.of(federacao));
 
-        DemitirArbitroDTO dto = new DemitirArbitroDTO("CBF", "Daronco");
+        DemitirArbitroDTO dto = new DemitirArbitroDTO("Daronco", "CBF");
 
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
