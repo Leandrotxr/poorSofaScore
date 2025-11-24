@@ -14,6 +14,18 @@ pipeline {
             }
         }
 
+        stage('Validate') {
+            steps {
+                echo '🔎 Validando projeto...'
+                sh 'mvn validate'
+            }
+            post {
+                  failure {
+                        echo '❌ Falha na validação. Verifique o pom.xml e dependências.'
+                  }
+            }
+        }
+
         stage('Build') {
             steps {
                 echo '🏗️ Compilando o projeto...'
