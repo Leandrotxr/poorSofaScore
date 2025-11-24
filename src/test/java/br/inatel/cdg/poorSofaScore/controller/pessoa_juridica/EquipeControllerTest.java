@@ -1,6 +1,9 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.EquipeService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarJogadorDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.ContratarTecnicoDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.EquipeNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
@@ -9,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -74,4 +78,61 @@ class EquipeControllerTest {
 
         verify(equipeService, times(1)).adicionarEquipe(equipe);
     }
+
+    // Teste para PATCH /equipes/contratarTecnico
+    @Test
+    void deveContratarTecnico() {
+        ContratarTecnicoDTO dto = new ContratarTecnicoDTO("Flamengo", "Tite");
+
+        ResponseEntity<String> response = equipeController.contratarTecnico(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Técnico contratado pela equipe com sucesso!", response.getBody());
+
+        verify(equipeService, times(1))
+                .contratarTecnico("Flamengo", "Tite");
+    }
+
+    // Teste para PATCH /equipes/demitirTecnico
+    @Test
+    void deveDemitirTecnico() {
+        EquipeNomeDTO dto = new EquipeNomeDTO("Flamengo");
+
+        ResponseEntity<String> response = equipeController.demitirTecnico(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Técnico da equipe Flamengo demitido", response.getBody());
+
+        verify(equipeService, times(1))
+                .demitirTecnico(dto);
+    }
+
+    // Teste para PATCH /equipes/contratarJogador
+    @Test
+    void deveContratarJogador() {
+        ContratarJogadorDTO dto = new ContratarJogadorDTO("Flamengo", "Pedro");
+
+        ResponseEntity<String> response = equipeController.contratarJogador(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Pedro contratado pela equipe Flamengo", response.getBody());
+
+        verify(equipeService, times(1))
+                .contratarJogador("Flamengo", "Pedro");
+    }
+
+    // Teste para PATCH /equipes/demitirJogador
+    @Test
+    void deveDemitirJogador() {
+        DemitirJogadorDTO dto = new DemitirJogadorDTO("Flamengo", "Pedro");
+
+        ResponseEntity<String> response = equipeController.demitirJogador(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Pedro demitido da equipe Flamengo", response.getBody());
+
+        verify(equipeService, times(1))
+                .demitirJogador(dto);
+    }
+
 }

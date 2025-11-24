@@ -1,23 +1,33 @@
 package br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica;
 
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Arbitro;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_fisica.Jogador;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
+import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_fisica.ArbitroRepository;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.pessoa_juridica.FederacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class FederacaoService {
 
-    @Autowired
-    private FederacaoRepository federacaoRepository;
+    private final FederacaoRepository federacaoRepository;
+    private final ArbitroRepository arbitroRepository;
+
+    public FederacaoService(FederacaoRepository federacaoRepository, ArbitroRepository arbitroRepository) {
+        this.federacaoRepository = federacaoRepository;
+        this.arbitroRepository = arbitroRepository;
+    }
 
     public void adcionarCampeonato(Federacao federacao, Campeonato campeonato){
         federacao.getLista_campeonato().add(campeonato);
@@ -61,7 +71,55 @@ public class FederacaoService {
                 .build();
     }
 
-    public void adicionarFederacao(Federacao federacao) {
-        federacaoRepository.save(federacao);
+    public Federacao adicionarFederacao(Federacao federacao) {
+        if(federacao.getNome() == null || federacao.getNome().isBlank())
+            throw new IllegalArgumentException("Nome da federacao é obrigatório");
+        if(federacao.getCnpj() == null || federacao.getCnpj().isBlank())
+            throw new IllegalArgumentException("CNPJ da federacao é obrigatório");
+
+        return federacaoRepository.save(federacao);
+    }
+
+    public void contratarArbitro(String nomeFederacao, String NomeArbitro) {
+
+        if (nomeFederacao == null || nomeFederacao.isBlank() || NomeArbitro == null || NomeArbitro.isBlank()) {
+            throw new IllegalArgumentException("Nome da federacao e do arbitro são obrigatórios");
+        }
+
+        Federacao federacao = federacaoRepository.findByNome(nomeFederacao)
+                .orElseThrow(() -> new IllegalArgumentException("Federacao não encontrada"));
+        Arbitro arbitro = arbitroRepository.findByNome(NomeArbitro)
+                .orElseThrow(() -> new IllegalArgumentException("Arbitro não encontrado"));
+
+        if (arbitro.getFederacao() != null) {
+            throw new IllegalArgumentException("O arbitro já pertence à federacao " +
+                    arbitro.getFederacao().getNome());
+        }
+
+        federacao.contratar(arbitro);
+        arbitro.setFederacao(federacao);
+        arbitroRepository.save(arbitro);
+    }
+
+    public Federacao demitirArbitro(DemitirArbitroDTO dto) {
+
+        if (dto.getNomeArbitro() == null || dto.getNomeArbitro().isBlank()) {
+            throw new IllegalArgumentException("Nome do árbitro é obrigatório");
+        }
+        if (dto.getNomeFederacao() == null || dto.getNomeFederacao().isBlank()) {
+            throw new IllegalArgumentException("Nome do jogador é obrigatório");
+        }
+
+        Arbitro arbitro = arbitroRepository.findByNome(dto.getNomeArbitro())
+                .orElseThrow(() -> new IllegalArgumentException("Arbitro não encontrado"));
+        Federacao federacao = federacaoRepository.findByNome(dto.getNomeFederacao())
+                .orElseThrow(() -> new IllegalArgumentException("Federação não encontrada"));
+
+        if (!Objects.equals(arbitro.getFederacao().getNome(), federacao.getNome()))
+            throw new IllegalArgumentException("O arbitro não pertence a essa federação");
+
+        arbitro.setFederacao(null);
+        federacao.getLista_arbitro().remove(arbitro);
+        return federacaoRepository.save(federacao);
     }
 }

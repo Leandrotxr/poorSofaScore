@@ -5,6 +5,9 @@ import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.Patrocinad
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +25,8 @@ public class PatrocinadorController {
     }
 
     @PostMapping("/adicionarPatrocinador")
-    public void adicionarPatrocinador(@RequestBody Patrocinador patrocinador) {
-        patrocinadorService.adicionarPatrocinador(patrocinador);
+    public ResponseEntity<Patrocinador> adicionarPatrocinador(@Validated @RequestBody Patrocinador patrocinador) {
+        Patrocinador novoPatrocinador = patrocinadorService.adicionarPatrocinador(patrocinador);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoPatrocinador);
     }
 }

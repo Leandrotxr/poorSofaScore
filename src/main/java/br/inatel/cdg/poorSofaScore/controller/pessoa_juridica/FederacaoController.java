@@ -1,10 +1,15 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.FederacaoService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirJogadorDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,7 +37,24 @@ public class FederacaoController {
     }
 
     @PostMapping("/adicionarFederacao")
-    public void adicionarFederacao(@RequestBody Federacao federacao) {
-        federacaoService.adicionarFederacao(federacao);
+    public ResponseEntity<Federacao> adicionarFederacao(@RequestBody Federacao federacao) {
+        Federacao novafederacao = federacaoService.adicionarFederacao(federacao);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novafederacao);
+    }
+
+    @PatchMapping("/contratarArbitro")
+    public ResponseEntity<String> contratarArbitro(@RequestBody ArbitroDTO dto) {
+
+        federacaoService.contratarArbitro(dto.getFederacao(), dto.getNome());
+
+        return ResponseEntity.ok("Árbitro contratado pela federação com sucesso!");
+    }
+
+    @PatchMapping("/demitirArbitro")
+    public ResponseEntity<String> demitirArbitro(@RequestBody DemitirArbitroDTO dto) {
+
+        federacaoService.demitirArbitro(dto);
+
+        return ResponseEntity.ok(dto.getNomeArbitro() + " demitido da federação " + dto.getNomeFederacao());
     }
 }

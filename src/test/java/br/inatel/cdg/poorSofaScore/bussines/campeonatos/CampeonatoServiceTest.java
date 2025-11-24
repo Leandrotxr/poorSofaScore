@@ -1,66 +1,62 @@
 package br.inatel.cdg.poorSofaScore.bussines.campeonatos;
 
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.campeonatos.CampeonatoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.campeonatos.Campeonato;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Equipe;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
 import br.inatel.cdg.poorSofaScore.infrastructure.repository.campeonatos.CampeonatoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.ArgumentCaptor;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 public class CampeonatoServiceTest {
 
-    @InjectMocks
     private CampeonatoService campeonatoService;
-
-    @Mock
     private CampeonatoRepository campeonatoRepository;
-
     private Campeonato campeonato;
-    private Federacao federacaoMock;
-    private List<Equipe> listaEquipeMock;
-    private List<Campeonato> listaCampeonatoMock;
+    private Federacao federacao;
+    private Equipe equipe;
 
     @BeforeEach
     void setUp() {
+        campeonatoRepository = mock(CampeonatoRepository.class);
+        campeonatoService = new CampeonatoService(campeonatoRepository);
+
+        federacao = Federacao.builder()
+                .nome("FA")
+                .build();
+
+        equipe = Equipe.builder()
+                .lista_campeonatos(new ArrayList<>())
+                .nome("Arsenal")
+                .build();
+
         campeonato = Campeonato.builder()
                 .nome("Premier League")
                 .local("Inglaterra")
                 .premio(200000000)
+                .federacao(federacao)
+                .equipes(new ArrayList<>())
                 .build();
-        federacaoMock = Mockito.mock(Federacao.class);
-        listaEquipeMock = Mockito.mock(List.class);
     }
 
-    @Test
-    void deveAdicionarFederacao() {
-        campeonato.setFederacao(federacaoMock);
-        assertEquals(federacaoMock, campeonato.getFederacao());
+    private List<CampeonatoDTO> executarListagemBasica() {
+        when(campeonatoRepository.findAll()).thenReturn(List.of(campeonato));
+        return campeonatoService.listarCampeonatos();
     }
 
-    @Test
-    void deveAdicionarCampeonatoNaFederacao() {
-        when(federacaoMock.getLista_campeonato()).thenReturn(listaCampeonatoMock);
-        campeonato.setFederacao(federacaoMock);
-        assertEquals(federacaoMock.getLista_campeonato(), listaCampeonatoMock);
-    }
-
-    @Test
-    void deveAdicionarEquipe() {
-        campeonato.setEquipes(listaEquipeMock);
-        assertEquals(listaEquipeMock, campeonato.getEquipes());
+    private CampeonatoDTO getDTO() {
+        List<CampeonatoDTO> lista = executarListagemBasica();
+        assertEquals(1, lista.size());
+        return lista.get(0);
     }
 
     @Test
@@ -70,24 +66,133 @@ public class CampeonatoServiceTest {
 
         campeonatoService.adicionarCampeonato(novoCampeonato);
 
-        verify(campeonatoRepository, times(1)).save(novoCampeonato);
+        verify(campeonatoRepository).save(novoCampeonato);
+
+    }
+
+    @Test
+    void deveLancarExcecao_QuandoNomeForNulo() {
+        campeonato = Campeonato.builder()
+                .local("Inglaterra")
+                .premio(200000000)
+                .build();
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                campeonatoService.adicionarCampeonato(campeonato));
+
+        assertEquals("Nome do campeonato é obrigatório", ex.getMessage());
+
+    }
+
+    @Test
+    void deveLancarExcecao_QuandoLocalForNulo() {
+        campeonato = Campeonato.builder()
+                .nome("Premier League")
+                .premio(200000000)
+                .build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                campeonatoService.adicionarCampeonato(campeonato));
+
+        assertEquals("Local do campeonato é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveLancarExcecao_QuandoPremioForZero() {
+        campeonato = Campeonato.builder()
+                .nome("Premier League")
+                .local("Inglaterra")
+                .build();
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+                campeonatoService.adicionarCampeonato(campeonato));
+
+        assertEquals("Prêmio do campeonato é obrigatório", ex.getMessage());
+    }
+
+    @Test
+    void deveRetornarListaVaziaQuandoNaoExistiremCampeonatos() {
+        when(campeonatoRepository.findAll()).thenReturn(List.of());
+
+        List<CampeonatoDTO> resultado = campeonatoService.listarCampeonatos();
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void deveAdicionarCampeonatoNaEquipeEAEquipeNoCampeonato() {
+        campeonatoService.adicionarCampeonato(equipe, campeonato);
+
+        assertEquals(1, equipe.getLista_campeonatos().size());
+        assertEquals(1, campeonato.getEquipes().size());
+    }
+
+    @Test
+    void deveListarCampeonatosComONomeConvertidoParaDTO() {
+        assertEquals("Premier League", getDTO().getNome());
+    }
+
+    @Test
+    void deveListarCampeonatosComOLocalConvertidoParaDTO() {
+        assertEquals("Inglaterra", getDTO().getLocal());
+    }
+
+    @Test
+    void deveListarCampeonatosComOPremioConvertidoParaDTO() {
+        assertEquals(200000000, getDTO().getPremio());
+    }
+
+    @Test
+    void deveListarCampeonatosComAFederacaoConvertidaParaDTO() {
+        assertEquals("FA", getDTO().getFederacao());
+    }
+
+    @Test
+    void deveListarCampeonatosComEquipesConvertidasParaDTO() {
+        campeonato.getEquipes().add(equipe);
+        assertEquals(1, getDTO().getEquipes().size());
+        assertTrue(getDTO().getEquipes().contains("Arsenal"));
+    }
+
+    @Test
+    void deveListarApenasNomes() {
+        when(campeonatoRepository.findAll()).thenReturn(List.of(campeonato));
+
+        List<CampeonatoNomeDTO> lista = campeonatoService.listarNome();
+
+        assertEquals("Premier League", lista.get(0).getNome());
     }
 
 
     @Test
-    void deveRetornarCampeonatoDTO() {
+    void deveRetornarDTOAoBuscarPorNome() {
+        when(campeonatoRepository.findByNome("Premier League"))
+                .thenReturn(Optional.of(campeonato));
 
-        String nomeBusca = "Liga Teste";
+        CampeonatoDTO dto = campeonatoService.buscarCampeonatoPorNome("Premier League");
 
-        Campeonato entidade = Campeonato.builder().nome(nomeBusca).local("Paris").premio(500).equipes(List.of()).build();
+        assertEquals("Premier League", dto.getNome());
+    }
 
-        when(campeonatoRepository.findByNome(nomeBusca)).thenReturn(Optional.of(entidade));
+    @Test
+    void deveLancarExcecaoQuandoCampeonatoNaoEncontrado() {
+        when(campeonatoRepository.findByNome("teste"))
+                .thenReturn(Optional.empty());
 
-        CampeonatoDTO resultado = campeonatoService.buscarCampeonatoPorNome(nomeBusca);
+        RuntimeException ex = assertThrows(RuntimeException.class,
+                () -> campeonatoService.buscarCampeonatoPorNome("teste"));
 
-        verify(campeonatoRepository, times(1)).findByNome(nomeBusca);
+        assertTrue(ex.getMessage().contains("Campeonato não encontrada"));
+    }
 
-        assertEquals(nomeBusca, resultado.getNome());
-        assertEquals("Paris", resultado.getLocal());
+    @Test
+    void deveSalvarCampeonatoValido() {
+        when(campeonatoRepository.save(any(Campeonato.class)))
+                .thenAnswer(inv -> inv.getArgument(0));
+
+        campeonatoService.adicionarCampeonato(campeonato);
+
+        ArgumentCaptor<Campeonato> captor = ArgumentCaptor.forClass(Campeonato.class);
+        verify(campeonatoRepository, times(1)).save(captor.capture());
+
+        assertEquals("Premier League", captor.getValue().getNome());
     }
 }

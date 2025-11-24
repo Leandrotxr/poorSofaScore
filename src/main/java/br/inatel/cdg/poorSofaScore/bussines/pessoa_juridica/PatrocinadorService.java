@@ -22,7 +22,12 @@ public class PatrocinadorService {
                 .collect(Collectors.toList());
     }
 
-    public void adicionarPatrocinador(Patrocinador patrocinador) {
-        patrocinadorRepository.save(patrocinador);
+    public Patrocinador adicionarPatrocinador(Patrocinador patrocinador) {
+        if(patrocinador.getNome() == null || patrocinador.getNome().isBlank())
+            throw new IllegalArgumentException("Nome do patrocinador é obrigatório");
+        if(patrocinador.getCnpj() == null || patrocinador.getCnpj().isBlank())
+            throw new IllegalArgumentException("CNPJ do patrocinador é obrigatório");
+
+        return patrocinadorRepository.save(patrocinador);
     }
 }

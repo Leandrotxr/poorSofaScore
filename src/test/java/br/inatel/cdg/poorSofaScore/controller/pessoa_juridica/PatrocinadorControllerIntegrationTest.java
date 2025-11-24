@@ -3,6 +3,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.PatrocinadorService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.PatrocinadorNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Patrocinador;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +44,14 @@ public class PatrocinadorControllerIntegrationTest {
     // ---------- TESTE POST /patrocinadores/adicionarPatrocinador ----------
     @Test
     void deveAdicionarPatrocinador() throws Exception {
-        PatrocinadorDTO dto = PatrocinadorDTO.builder().nome("Puma").build();
+        Patrocinador dto = Patrocinador.builder()
+                .nome("Puma")
+                .cnpj("123456789")
+                .build();
 
         mockMvc.perform(post("/patrocinadores/adicionarPatrocinador")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }

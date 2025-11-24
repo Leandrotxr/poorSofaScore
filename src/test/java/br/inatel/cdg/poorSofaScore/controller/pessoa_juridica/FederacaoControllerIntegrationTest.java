@@ -3,6 +3,7 @@ package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.FederacaoService;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,11 +66,14 @@ public class FederacaoControllerIntegrationTest {
     // ---------- TESTE POST /federacoes/adicionarFederacao ----------
     @Test
     void deveAdicionarFederacao() throws Exception {
-        FederacaoDTO dto = FederacaoDTO.builder().nome("Fifa").build();
+        Federacao dto = Federacao.builder()
+                .nome("Fifa")
+                .cnpj("1234")
+                .build();
 
         mockMvc.perform(post("/federacoes/adicionarFederacao")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(dto)))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 }

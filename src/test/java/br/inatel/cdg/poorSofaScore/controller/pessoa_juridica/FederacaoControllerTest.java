@@ -1,6 +1,8 @@
 package br.inatel.cdg.poorSofaScore.controller.pessoa_juridica;
 
 import br.inatel.cdg.poorSofaScore.bussines.pessoa_juridica.FederacaoService;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.intermediaria.DemitirArbitroDTO;
+import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_fisica.ArbitroDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.dto.pessoa_juridica.FederacaoNomeDTO;
 import br.inatel.cdg.poorSofaScore.infrastructure.entitys.pessoa_juridica.Federacao;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -74,4 +77,37 @@ public class FederacaoControllerTest {
 
         verify(federacaoService, times(1)).adicionarFederacao(federacao);
     }
+
+    @Test
+    void deveContratarArbitro() {
+
+        ArbitroDTO dto = ArbitroDTO.builder()
+                .nome("José")
+                .federacao("FIFA")
+                .idade(40)
+                .build();
+
+        ResponseEntity<String> response = federacaoController.contratarArbitro(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Árbitro contratado pela federação com sucesso!", response.getBody());
+
+        verify(federacaoService, times(1))
+                .contratarArbitro("FIFA", "José");
+    }
+
+    @Test
+    void deveDemitirArbitro() {
+
+        DemitirArbitroDTO dto = new DemitirArbitroDTO("José", "FIFA");
+
+        ResponseEntity<String> response = federacaoController.demitirArbitro(dto);
+
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("José demitido da federação FIFA", response.getBody());
+
+        verify(federacaoService, times(1))
+                .demitirArbitro(dto);
+    }
+
 }
