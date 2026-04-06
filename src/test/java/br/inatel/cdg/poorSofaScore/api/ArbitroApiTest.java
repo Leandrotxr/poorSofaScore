@@ -190,4 +190,66 @@ public class ArbitroApiTest {
                 // Idealmente deve ser 404 (Not Found), mas aceitamos 500 caso o tratamento de exceção estoure erro interno
                 .statusCode(anyOf(is(404), is(500)));
     }
+
+    // TC-039 a TC-042: Novos cenários para Árbitros
+    
+    @Test
+    public void tc039_naoDeveCriarArbitroComCpfMuitoCurto() {
+        // Dado Inválido: CPF com apenas 3 dígitos
+        String payload = "{\n" +
+                "  \"nome\": \"Juiz Errado\",\n" +
+                "  \"cpf\": \"123\",\n" +
+                "  \"idade\": 30\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/arbitros/adicionarArbitro")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc040_naoDeveCriarArbitroComIdadeNegativa() {
+        // Dado Inválido: Idade impossível
+        String payload = "{\n" +
+                "  \"nome\": \"Benjamin Button\",\n" +
+                "  \"cpf\": \"11122233344\",\n" +
+                "  \"idade\": -5\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/arbitros/adicionarArbitro")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc041_deveRetornarListaVaziaDeNomesSeNaoHouverDados() {
+        // Caminho Feliz/Inoportuno: Verifica se a rota de nomes ao menos responde OK
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/arbitros/nomes")
+                .then()
+                .statusCode(200)
+                .body("$", notNullValue());
+    }
+
+    @Test
+    public void tc042_deveValidarSeCpfRetornadoEString() {
+        // Caminho Feliz: Validar contrato de tipo de dado
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/arbitros")
+                .then()
+                .statusCode(200)
+                .body("[0].cpf", anyOf(instanceOf(String.class), nullValue()));
+    }
 }

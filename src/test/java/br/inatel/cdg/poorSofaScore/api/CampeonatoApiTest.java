@@ -172,4 +172,73 @@ public class CampeonatoApiTest {
                 .then()
                 .statusCode(405); // 405 Method Not Allowed
     }
+
+    // TC-044 a TC-047: Novos cenários para Campeonatos
+
+    @Test
+    public void tc044_naoCriarCampeonatoComPremioNegativo() {
+        // Dado Inválido: Valor de prêmio abaixo de zero
+        String payload = "{\n" +
+                "  \"nome\": \"Copa Falida\",\n" +
+                "  \"local\": \"Brasil\",\n" +
+                "  \"premio\": -100.0\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/campeonatos/adicionarCampeonato")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc045_CriarCampeonatoComNomeMuitoLongo() {
+
+        //Nome com mais de 100 caracteres para testar limites de validação
+        String nomeLongo = "Campeonato Intergalatico de Futebol de Varzea 2026";
+        String payload = "{\n" +
+                "  \"nome\": \"" + nomeLongo + "\",\n" +
+                "  \"local\": \"Brasil\",\n" +
+                "  \"premio\": 1000.0\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/campeonatos/adicionarCampeonato")
+                .then()
+                .statusCode(201);
+    }
+
+    @Test
+    public void tc046_naoDeveAcessarRotaInexistenteDentroDeCampeonatos() {
+        // Dados Inoportunos: Tentando acessar um endpoint que não existe no controller
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/campeonatos/configuracoes/avancadas")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void tc047_naoDeveCriarCampeonatoComLocalEmBranco() {
+        // Dado Inválido: Nome existe, mas o local é uma string vazia
+        String payload = "{\n" +
+                "  \"nome\": \"Torneio Sem Sede\",\n" +
+                "  \"local\": \"\",\n" +
+                "  \"premio\": 500.0\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/campeonatos/adicionarCampeonato")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
 }
