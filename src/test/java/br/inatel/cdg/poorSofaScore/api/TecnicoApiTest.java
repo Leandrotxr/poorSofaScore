@@ -173,4 +173,35 @@ public class TecnicoApiTest {
                 .then()
                 .statusCode(anyOf(is(405), is(500)));
     }
+
+                //  + 2 testes
+    @Test
+    public void tc011_naoDeveCriarTecnicoSemCpf() {
+        // Dado Inválido: Ausência de campo obrigatório para identificação
+        String payload = "{\n" +
+                "  \"nome\": \"Tecnico Sem Documento\",\n" +
+                "  \"idade\": 50\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/tecnicos/adicionarTecnico")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc012_deveRetornarErroAoBuscarTecnicoInexistente() {
+        // Dados Inoportunos: Tenta localizar um técnico que não consta no banco H2
+        String nomeFantasma = "TreinadorInexistente123";
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/tecnicos/" + nomeFantasma)
+                .then()
+                .statusCode(anyOf(is(404), is(500)));
+    }
 }

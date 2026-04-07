@@ -157,4 +157,41 @@ public class JogadorApiTest {
                 .then()
                 .statusCode(anyOf(is(405), is(500)));
     }
+
+          //  + 2 testes
+    @Test
+    public void tc010_naoDeveCriarJogadorComIdadeExtrema() {
+        // Dado Inválido: Idade fora da realidade para um atleta ativo
+        String payload = "{\n" +
+                "  \"nome\": \"Jogador Veterano\",\n" +
+                "  \"cpf\": \"99900011122\",\n" +
+                "  \"idade\": 150\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/jogadores/adicionarJogador")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc011_naoDeveAceitarCpfComLetrasParaJogador() {
+        // Dado Inválido: CPF malformado contendo caracteres alfabéticos
+        String payload = "{\n" +
+                "  \"nome\": \"Teste Silva\",\n" +
+                "  \"cpf\": \"123ABC789XY\",\n" +
+                "  \"idade\": 25\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/jogadores/adicionarJogador")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
 }
