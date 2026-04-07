@@ -146,7 +146,25 @@ public class TecnicoApiTest {
     }
 
     @Test
-    public void tc009_deveBloquearMetodoGetNaRotaDeCriacao() {
+    public void tc009_naoDeveAceitarTiposDeDadosIncorretosNoPost() {
+        String payload = "{\n" +
+                "  \"nome\": 123,\n" +
+                "  \"cpf\": 12345678900,\n" +
+                "  \"idade\": \"40\",\n" +
+                "  \"nacionalidade\": \"\"\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/tecnicos/adicionarTecnico")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc010_deveBloquearMetodoGetNaRotaDeCriacao() {
         given()
                 .when()
                 .get("/tecnicos/adicionarTecnico")
