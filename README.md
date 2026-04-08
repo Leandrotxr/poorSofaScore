@@ -13,7 +13,9 @@ O sistema permite operações CRUD completas e simula relações reais entre ent
 - Java 17  
 - Spring Boot (Data JPA, Web)  
 - Banco em memória H2 para desenvolvimento  
-- Mockito + JUnit 5 para testes  
+- Mockito + JUnit 5 para testes unitários
+- RestAssured para testes da API
+- K6 + JavaScript para testes de carga e performance
 - Maven como ferramenta de build  
 - Jenkins (CI/CD) para automatizar build, testes e deploy simulado  
 
