@@ -1,5 +1,11 @@
 # Poor SofaScore  
-Uma aplicação em Spring Boot para gestão de organizações futebolísticas.
+
+---
+
+## 📌 Sobre o projeto
+O Poor SofaScore é uma API REST desenvolvida em Spring Boot para gerenciamento de entidades do ecossistema futebolístico.
+
+O sistema permite operações CRUD completas e simula relações reais entre entidades esportivas, servindo como base para estudos de arquitetura em camadas, testes automatizados e integração contínua.
 
 ---
 
@@ -156,7 +162,7 @@ Os resultados ficam em:
 ```bash
 target/surefire-reports/
 ```
-Para gerar o relatório de testes (que será encontrado em `target/site/` no arquivo `surefitereport.html`)
+Para gerar o relatório de testes (que será encontrado em `target/site/` no arquivo `surefire-report.html`)
 
 ```bash
 mvn surefire-report:report
@@ -181,6 +187,11 @@ Para usar a Pipeline no Jenkins:
 
 ## 👥 Autores
 Projeto desenvolvido por Leandro Teixeira, Pedro Paulo, Pedro Henrique e Luiz Otávio como parte de estudos em Engenharia de Software (C14). Projeto atualizado por Leandro Teixeira, Pedro Paulo, Pedro Henrique, Luiz Otávio e Henrique Fonseca como parte dos estudos de Qualidade, Gerência de Config e Evolução de Software (S07).
+
+---
+
+## 📄 Licença
+Este projeto é para fins acadêmicos.
 
 
 
