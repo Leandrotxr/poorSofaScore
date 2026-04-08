@@ -146,6 +146,8 @@ poorSofaScore/
 
 ## 🧪 Como rodar testes
 
+Execute o comando para limpar builds antigos e executar os testes:
+
 ```bash
 mvn clean test
 ```
@@ -156,7 +158,7 @@ target/surefire-reports/
 ```
 Para gerar o relatório de testes (que será encontrado em `target/site/` no arquivo `surefitereport.html`)
 
-``bash
+```bash
 mvn surefire-report:report
 ```
 
