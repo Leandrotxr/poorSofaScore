@@ -30,8 +30,9 @@ public class EquipeApiTest {
     public void tc010_deveCriarEquipeComSucesso() {
         String payload = "{\n" +
                 "  \"nome\": \"Palmeiras\",\n" +
-                "  \"local\": \"Brasil\",\n" +
-                "  \"divida\": 0.0\n" +
+                "  \"cnpj\": \"123456654\",\n" +
+                "  \"fundacao\": 1900,\n" +
+                "  \"sede\": \"Brasil\"\n" +
                 "}";
 
         given()
@@ -40,7 +41,7 @@ public class EquipeApiTest {
                 .when()
                 .post("/equipes/adicionarEquipe")
                 .then()
-                .statusCode(201); // Valida o HttpStatus.CREATED que está no Controller
+                .statusCode(201);
     }
 
     @Test
