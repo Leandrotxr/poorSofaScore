@@ -170,31 +170,27 @@ Para gerar o relatório de testes (que será encontrado em `target/site/` no arq
 ```bash
 mvn surefire-report:report
 ```
+---
 
+## ⚡ Testes de performance no K6
 
-## ⚡Testes de performance (k6)
-
-### ⚙️ Instalação do k6
-
-Acesse: https://k6.io/docs/get-started/installation/
+Para instalar o K6, acesse: https://k6.io/docs/get-started/installation/
 
 ou 
 
-cmd do Windows (via winget)
-   
-    winget install k6 --source winget
+```bash   
+winget install k6 --source winget
+```
 
 Após instalar, reinicie o terminal e teste:
 
-    k6 version
+```bash
+k6 version
+```
 
-### 📌 Objetivo
-Simular múltiplos usuários acessando a API para avaliar:
-- Tempo de resposta  
-- Estabilidade  
-- Comportamento sob carga  
+---
 
-### ▶️ Como executar
+## :chart_with_upwards_trend: Como executar
 
 1. Inicie a API:
    
@@ -218,19 +214,6 @@ Simular múltiplos usuários acessando a API para avaliar:
    ```bash
    k6 run performance-tests/jogadores-post-test.js
    ```
-
-### 📊 Cenário de teste
-
-   10 usuários simultâneos (VUs)
-   
-   Duração de 10 segundos
-   
-   Validações:
-      
-      Status HTTP = 200/201
-      
-      Tempo de resposta < 2000ms
-
 ---
 
 ## 🔄 Pipeline (CI/CD)
