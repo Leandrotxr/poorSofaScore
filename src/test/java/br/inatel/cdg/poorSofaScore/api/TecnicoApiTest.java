@@ -1,14 +1,16 @@
 package br.inatel.cdg.poorSofaScore.api;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
+import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import io.restassured.http.ContentType;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -170,5 +172,36 @@ public class TecnicoApiTest {
                 .get("/tecnicos/adicionarTecnico")
                 .then()
                 .statusCode(anyOf(is(405), is(500)));
+    }
+
+                //  + 2 testes
+    @Test
+    public void tc011_naoDeveCriarTecnicoSemCpf() {
+        // Dado Inválido: Ausência de campo obrigatório para identificação
+        String payload = "{\n" +
+                "  \"nome\": \"Tecnico Sem Documento\",\n" +
+                "  \"idade\": 50\n" +
+                "}";
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(payload)
+                .when()
+                .post("/tecnicos/adicionarTecnico")
+                .then()
+                .statusCode(anyOf(is(400), is(500)));
+    }
+
+    @Test
+    public void tc012_deveRetornarErroAoBuscarTecnicoInexistente() {
+        // Dados Inoportunos: Tenta localizar um técnico que não consta no banco H2
+        String nomeFantasma = "TreinadorInexistente123";
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/tecnicos/" + nomeFantasma)
+                .then()
+                .statusCode(anyOf(is(404), is(500)));
     }
 }
