@@ -96,6 +96,7 @@ poorSofaScore/
 │   │               └── Patrocinador.java
 │   └── test/java/br/inatel/cdg/poorSofaScore/
 │       ├── PoorSofaScoreApplicationTests.java
+│       ├── api/
 │       ├── controller/
 │       ├── infrastructure/
 │       ├── bussines/
@@ -146,12 +147,17 @@ poorSofaScore/
 ## 🧪 Como rodar testes
 
 ```bash
-mvn test
+mvn clean test
 ```
 Os resultados ficam em:
 
 ```bash
 target/surefire-reports/
+```
+Para gerar o relatório de testes (que será encontrado em `target/site/` no arquivo `surefitereport.html`)
+
+``bash
+mvn surefire-report:report
 ```
 
 ---
@@ -172,6 +178,11 @@ Para usar a Pipeline no Jenkins:
 ---
 
 ## 👥 Autores
-Projeto desenvolvido por Leandro Teixeira, Pedro Paulo, Pedro Henrique e Luiz Otávio como parte de estudos em Engenharia de Software (C14)
+Projeto desenvolvido por Leandro Teixeira, Pedro Paulo, Pedro Henrique e Luiz Otávio como parte de estudos em Engenharia de Software (C14). Projeto atualizado por Leandro Teixeira, Pedro Paulo, Pedro Henrique, Luiz Otávio e Henrique Fonseca como parte dos estudos de Qualidade, Gerência de Config e Evolução de Software (S07).
+
+
+
+
+
 
 
