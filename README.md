@@ -22,6 +22,9 @@ O sistema permite operações CRUD completas e simula relações reais entre ent
 ## 🧱 Estrutura do projeto  
 ```bash
 poorSofaScore/
+├── performance-tests
+│    ├── jogadores-get-test.js
+│    └── jogadores-post-test.js
 ├── src/
 │   ├── main/java/br/inatel/cdg/poorSofaScore/
 │   │   ├── PoorSofaScoreApplication.java
@@ -167,6 +170,66 @@ Para gerar o relatório de testes (que será encontrado em `target/site/` no arq
 ```bash
 mvn surefire-report:report
 ```
+
+
+## ⚡Testes de performance (k6)
+
+### ⚙️ Instalação do k6
+
+Acesse: https://k6.io/docs/get-started/installation/
+
+ou 
+
+cmd do Windows (via winget)
+   
+    winget install k6 --source winget
+
+Após instalar, reinicie o terminal e teste:
+
+    k6 version
+
+### 📌 Objetivo
+Simular múltiplos usuários acessando a API para avaliar:
+- Tempo de resposta  
+- Estabilidade  
+- Comportamento sob carga  
+
+### ▶️ Como executar
+
+1. Inicie a API:
+   
+      ```bash
+   ./mvnw spring-boot:run
+   ```
+   ou
+   
+   ```bash
+   mvn spring-boot:run
+   ```
+   
+2. Execute o teste de leitura (GET):
+
+   ```bash
+   k6 run performance-tests/jogadores-get-test.js
+   ```
+
+3. Execute o teste de escrita (POST):
+
+   ```bash
+   k6 run performance-tests/jogadores-post-test.js
+   ```
+
+### 📊 Cenário de teste
+
+   10 usuários simultâneos (VUs)
+   
+   Duração de 10 segundos
+   
+   Validações:
+      
+      Status HTTP = 200/201
+      
+      Tempo de resposta < 2000ms
 
 ---
 
