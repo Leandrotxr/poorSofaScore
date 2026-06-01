@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    image: ordezin/poor-sofascore-app:latest  #usando a imagem criada no dockerhub
+    container_name: poor-sofascore-app
+    ports:
+      - "3000:3000"
+    networks:
+      - sofascore-network
+
+  monitor:
+    build:
+      context: .
+      dockerfile: Dockerfile.monitor
+    container_name: sofascore-monitor
+    depends_on:
+      - app
+    networks:
+      - sofascore-network
+
+networks:
+  sofascore-network:
+    driver: bridge
