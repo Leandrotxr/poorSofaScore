@@ -77,7 +77,7 @@ async function carregarDetalhesEquipe() {
         conteudoDiv.innerHTML = `
             <div class="detalhes-bloco" style="display: flex; flex-direction: column; gap: 18px;">
                 <div class="info-linha">
-                    <span class="info-label">📍 Sede / Cidade:</span> 
+                    <span class="info-label">📍 Sede:</span> 
                     <span>${equipe.sede || 'Não informada'}</span>
                 </div>
                 
@@ -92,7 +92,7 @@ async function carregarDetalhesEquipe() {
                 </div>
                 
                 <div class="info-linha" style="border-top: 1px solid #e2e8f0; padding-top: 15px;">
-                    <span class="info-label" style="display: block; margin-bottom: 8px;">👥 Elenco / Jogadores:</span>
+                    <span class="info-label" style="display: block; margin-bottom: 8px;">👥 Elenco:</span>
                     ${jogadoresHTML}
                 </div>
 
