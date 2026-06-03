@@ -27,7 +27,7 @@ async function carregarDetalhes() {
         if (campeonato.equipes && campeonato.equipes.length > 0) {
             equipesHTML = '<ul style="margin: 0; padding-left: 20px; color: #4a5568;">';
             campeonato.equipes.forEach(equipe => {
-                equipesHTML += `<li style="margin-bottom: 5px; font-weight: 500;">🛡️ ${equipe}</li>`;
+                equipesHTML += `<li style="margin-bottom: 5px; font-weight: 500;"> ${equipe}</li>`;
             });
             equipesHTML += '</ul>';
         }
