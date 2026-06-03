@@ -1,0 +1,32 @@
+FROM jenkins/jenkins:lts-jdk17
+
+USER root
+
+# Instala dependencias do sistema: Python3, pip, Maven, ferramentas uteis
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    maven \
+    python3 \
+    python3-pip \
+    python3-venv \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instala Docker CLI para que o Jenkins possa construir imagens dentro do container
+RUN curl -fsSL https://get.docker.com -o /tmp/get-docker.sh \
+    && sh /tmp/get-docker.sh \
+    && rm /tmp/get-docker.sh
+
+# Adiciona o usuario jenkins ao grupo docker para permitir execucao sem sudo
+RUN usermod -aG docker jenkins
+
+USER jenkins
+
+# Pre-instala plugins essenciais do Jenkins via plugin CLI
+RUN jenkins-plugin-cli --plugins \
+    "pipeline-stage-view:2.34" \
+    "email-ext:2.105" \
+    "git:5.3.0" \
+    "workflow-aggregator:596.v8c21c963d92d" \
+    "docker-workflow:580.vc0c340686b_54" \
+    "timestamper:1.26"
