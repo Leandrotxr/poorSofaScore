@@ -31,7 +31,6 @@
 </div>
 
 <script>
-    // Como o HTML roda junto com o Spring Boot, usamos apenas a rota relativa
     const API_URL = '/campeonatos';
 
     async function carregarCampeonatos() {
@@ -46,13 +45,11 @@
 
             const campeonatos = await response.json();
 
-            // Se a lista vier vazia do banco de dados
             if (campeonatos.length === 0) {
                 conteudoDiv.innerHTML = '<p>Nenhum campeonato cadastrado ainda. Use o Postman ou Insomnia para adicionar!</p>';
                 return;
             }
 
-            // Cria o container do Grid
             conteudoDiv.innerHTML = '<div class="grid-campeonatos" id="grid"></div>';
             const grid = document.getElementById('grid');
 
@@ -60,7 +57,6 @@
                 const card = document.createElement('div');
                 card.className = 'card-campeonato';
 
-                // Codificamos o nome com encodeURIComponent para evitar problemas com espaços ou acentos na URL
                 const nomeUrl = encodeURIComponent(camp.nome);
 
                 card.innerHTML = `
@@ -83,7 +79,6 @@
         }
     }
 
-    // Executa a função ao carregar a página
     carregarCampeonatos();
 </script>
 
