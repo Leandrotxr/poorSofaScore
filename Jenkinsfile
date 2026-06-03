@@ -1,94 +1,116 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven'
-        jdk 'JDK'
+    environment {
+        // E-mail configurado como variavel de ambiente no Jenkins (Manage Jenkins > System)
+        NOTIFICATION_EMAIL = "${env.NOTIFICATION_EMAIL}"
+        SMTP_HOST          = "${env.SMTP_HOST}"
+        SMTP_PORT          = "${env.SMTP_PORT}"
+        SMTP_USER          = "${env.SMTP_USER}"
+        SMTP_PASS          = "${env.SMTP_PASS}"
     }
 
     stages {
+
         stage('Checkout') {
             steps {
-                echo '📦 Baixando código do repositório...'
+                echo '=== Baixando codigo do repositorio ==='
                 checkout scm
-            }
-        }
-
-        stage('Validate') {
-            steps {
-                echo '🔎 Validando projeto...'
-                sh 'mvn validate'
-            }
-            post {
-                  failure {
-                        echo '❌ Falha na validação. Verifique o pom.xml e dependências.'
-                  }
             }
         }
 
         stage('Build') {
             steps {
-                echo '🏗️ Compilando o projeto...'
-                sh 'mvn clean package'
+                echo '=== Compilando o projeto ==='
+                sh './mvnw clean compile -B'
             }
-        }
-
-        stage('Tests (Parallel)') {
-            parallel {
-
-                stage('Unit Tests') {
-                    steps {
-                        echo '🧪 Executando TESTES UNITÁRIOS...'
-                        sh 'mvn -Dtest=*Test test'
-                    }
-                }
-
-                stage('Integration Tests') {
-                    steps {
-                        echo '🔗 Executando TESTES DE INTEGRAÇÃO...'
-                        sh 'mvn -Dtest=*IntegrationTest test'
-                    }
+            post {
+                failure {
+                    echo 'Falha na compilacao. Verifique o codigo-fonte.'
                 }
             }
         }
 
-        stage('Package') {
+        stage('Testes Unitarios') {
             steps {
-                echo '📦 Gerando artefato JAR...'
-                sh 'mvn package -DskipTests'
+                echo '=== Executando Testes Unitarios ==='
+                sh './mvnw -Dtest="*Test,*ServiceTest,*EntityTest,*RepositoryTest" -DfailIfNoTests=false test -B'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true,
+                          testResults: 'target/surefire-reports/*.xml'
+                }
             }
         }
 
-        stage('Deploy (simulado)') {
+        stage('Testes de Integracao') {
             steps {
-                echo '🚀 Simulando deploy do arquivo JAR...'
+                echo '=== Executando Testes de Integracao ==='
+                sh './mvnw -Dtest="*IntegrationTest,*ApiTest" -DfailIfNoTests=false test -B'
+            }
+            post {
+                always {
+                    junit allowEmptyResults: true,
+                          testResults: 'target/surefire-reports/*.xml'
+                }
+            }
+        }
+
+        stage('Cobertura de Testes') {
+            steps {
+                echo '=== Gerando relatorio de cobertura JaCoCo ==='
+                sh './mvnw clean test jacoco:report -B'
+            }
+        }
+
+        stage('Empacotamento') {
+            steps {
+                echo '=== Gerando artefato JAR ==='
+                sh './mvnw package -DskipTests -B'
                 sh 'ls -lh target/*.jar'
+            }
+        }
+
+        stage('Artefatos Jenkins') {
+            steps {
+                echo '=== Arquivando artefatos no Jenkins ==='
+                archiveArtifacts(
+                    artifacts: 'target/*.jar',
+                    fingerprint: true,
+                    allowEmptyArchive: false
+                )
+                archiveArtifacts(
+                    artifacts: 'target/surefire-reports/**',
+                    allowEmptyArchive: true
+                )
+                archiveArtifacts(
+                    artifacts: 'target/site/jacoco/**',
+                    allowEmptyArchive: true
+                )
+            }
+        }
+
+        stage('Notificacao') {
+            steps {
+                echo '=== Enviando notificacao de sucesso por e-mail ==='
+                withEnv(['BUILD_STATUS=SUCCESS']) {
+                    sh 'python3 send_notification.py || true'
+                }
             }
         }
     }
 
-	post {
-		success {
-			echo '✅ Build finalizado com sucesso!'
-			emailext (
-				subject: "✅ SUCESSO: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-				body: "A pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} foi concluída com SUCESSO! \n\nDetalhes: ${env.BUILD_URL}",
-				to: 'luizotavio.paiva07@gmail.com',
-				mimeType: 'text/plain'
-			)
-		}
-		failure {
-			echo '❌ Falha na pipeline. Verifique os logs.'
-			emailext (
-				subject: "❌ FALHA: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-				body: "A pipeline ${env.JOB_NAME} #${env.BUILD_NUMBER} FALHOU! \n\nVerifique os logs: ${env.BUILD_URL}/console",
-				to: 'luizotavio.paiva07@gmail.com',
-				mimeType: 'text/plain'
-			)
-		}
-		// Adiciona uma etapa para limpar arquivos de build após a conclusão
-		always {
-			sh 'mvn clean'
-		}
-	}
+    post {
+        failure {
+            echo '=== Pipeline falhou — enviando notificacao de falha ==='
+            withEnv(['BUILD_STATUS=FAILURE']) {
+                sh 'python3 send_notification.py || true'
+            }
+        }
+        always {
+            echo '=== Pipeline finalizada. Limpando workspace... ==='
+            cleanWs()
+        }
+    }
 }
