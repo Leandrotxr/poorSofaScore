@@ -2,14 +2,18 @@ version: '3.8'
 
 services:
   app:
-    image: ordezin/poor-sofascore-app:latest  #usando a imagem criada no dockerhub
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: poor-sofascore-app
     ports:
       - "3000:3000"
+    environment:
+      - SERVER_PORT=3000
     networks:
       - sofascore-network
     healthcheck:
-      test: [ "CMD", "sh", "-c", "wget -qO- http://localhost:3000/ || exit 1" ]
+      test: [ "CMD", "sh", "-c", "wget -qO- http://localhost:3000/index.html || exit 1" ]
       interval: 30s
       timeout: 10s
       retries: 3
