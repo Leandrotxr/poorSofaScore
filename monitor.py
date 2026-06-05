@@ -2,7 +2,7 @@ import urllib.request
 import time
 
 
-API_URL = "http://app:3000/"
+API_URL = "http://app:3000/index.html"
 
 print(f"Iniciando monitoramento ativo da API em: {API_URL}")
 
