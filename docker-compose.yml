@@ -57,6 +57,15 @@ services:
     networks:
       - sofascore-network
 
+  cache:
+    image: redis:7-alpine
+    container_name: poor-sofascore-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - sofascore-network
+
 volumes:
   jenkins-data:
     name: poor-sofascore-jenkins-data
