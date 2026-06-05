@@ -92,11 +92,7 @@ poorSofaScore/
    ```
 3. Acesse no navegador:
    ```
-   http://localhost:3000
-   ```
-4. Exemplo de endpoint (listar equipes):
-   ```
-   http://localhost:3000/equipes
+   http://localhost:3000/index.html
    ```
 
 ---
@@ -222,6 +218,12 @@ A imagem da aplicação está publicada no Docker Hub:
 
 ```bash
 docker pull ordezin/poor-sofascore-app:latest
+```
+
+E para usuários Mac dos chips Apple Silicon:
+
+```bash
+DOCKER_DEFAULT_PLATFORM=linux/amd64 docker-compose up --build
 ```
 
 ---
