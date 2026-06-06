@@ -14,7 +14,7 @@ O Poor SofaScore é uma API REST que permite operações CRUD completas e simula
 
 - **Java 17** e **Spring Boot** (Data JPA, Web)
 - **H2** — banco em memória para desenvolvimento e testes
-- **HTML, CSS e JavaScript** — front-end estático servido pela aplicação
+- **HTML e JavaScript** — front-end estático servido pela aplicação
 - **Mockito + JUnit 5** — testes unitários
 - **RestAssured** — testes de integração e de API
 - **JaCoCo** — relatório de cobertura de testes
@@ -124,7 +124,7 @@ poorSofaScore/
 │   │   │               └── PatrocinadorRepository.java
 │   │   └── resources/
 │   │       ├── application.properties
-│   │       └── static/                   # Front-end (HTML + JS)
+│   │       └── static/                   
 │   │           ├── campeonatos.html
 │   │           ├── detalhes-campeonato.html
 │   │           ├── detalhes-equipe.html
@@ -364,6 +364,12 @@ Para parar:
 ```bash
 docker compose down        # para os containers (preserva volumes)
 docker compose down -v     # para e remove também os volumes
+```
+
+Caso seja usuário de Mac com Apple Silicon (M1 e superiores), use esse comando:
+
+```bash
+DOCKER_DEFAULT_PLATFORM=linux/amd64 docker-compose up --build
 ```
 
 ---
